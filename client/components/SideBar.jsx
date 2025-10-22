@@ -107,6 +107,7 @@ const AppSideBar = () => {
           </div>
         </SidebarFooter>
       </Sidebar>
+      <SidebarTrigger />
     </SidebarProvider>
   );
 };
