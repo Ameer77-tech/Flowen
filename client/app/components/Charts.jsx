@@ -22,7 +22,7 @@ const Charts = () => {
     { name: "Pending", value: 30 },
     { name: "Overdue", value: 200 },
   ];
-  const PIE_COLORS = ["#10B981", "#2f639e", "#EF4444"]; // green, yellow, red
+  const PIE_COLORS = ["#2f639e", "#f7f71e", "#EF4444"]; // green, yellow, red
 
   // Line Chart Data (Tasks Completed Over a Week)
   const lineData = [
@@ -46,7 +46,7 @@ const Charts = () => {
               data={pieData}
               dataKey="value"
               nameKey="name"
-              outerRadius={80}
+              
               label={({ name, percent }) =>
                 `${name} ${(percent * 100).toFixed(0)}%`
               }
@@ -84,7 +84,7 @@ const Charts = () => {
             <Line
               type="monotone"
               dataKey="completed"
-              stroke="#10B981"
+              stroke="#2f639e"
               strokeWidth={3}
               activeDot={{ r: 6 }}
             />

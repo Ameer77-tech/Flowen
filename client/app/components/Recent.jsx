@@ -45,7 +45,9 @@ const statusColors = {
 export default function RecentTasks() {
   return (
     <div className="p-5">
-     
+     <Card className={"p-3"}>
+        <CardTitle >Today's Tasks</CardTitle>
+     </Card>
     </div>
   );
 }

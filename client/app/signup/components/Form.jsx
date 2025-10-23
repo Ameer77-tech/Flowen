@@ -15,8 +15,8 @@ import React from "react";
 const Form = () => {
   return (
     <Card className="w-full sm:w-3/4 md:w-2/3 lg:w-2/5">
-      <CardHeader>
-        <CardTitle className="text-3xl md:text-4xl lg:text-5xl">
+      <CardHeader className={"mb-5"}>
+        <CardTitle className="text-3xl text-primary md:text-4xl lg:text-5xl">
           Create Your Account
         </CardTitle>
         <CardDescription className="text-sm md:text-base lg:text-lg">
@@ -25,7 +25,7 @@ const Form = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <form className="flex flex-col gap-4">
-          <Input placeholder="Full Name" className={"lg:text-lg lg:py-2"} />
+          <Input placeholder="Username" className={"lg:text-lg lg:py-2"} />
           <Input
             placeholder="Email"
             type="email"

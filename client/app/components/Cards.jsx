@@ -3,7 +3,7 @@ import DashboardCard from "./Card";
 
 const Cards = () => {
   return (
-    <div className="p-5 lg:grid-cols-4 md:grid-cols-3 grid gap-5 place-items-center">
+    <div className="p-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 grid gap-5 place-items-center">
       <DashboardCard
         title={"Total"}
         count={120}
