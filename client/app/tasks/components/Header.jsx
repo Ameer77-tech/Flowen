@@ -1,3 +1,4 @@
+"use client";
 import {
   Card,
   CardDescription,
@@ -6,9 +7,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Grid, List } from "lucide-react";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 
-const Header = () => {
+const Header = ({ view, setview }) => {
+  const [left, setleft] = useState(0);
+  const [width, setwidth] = useState(0);
+  const [viewCardPos, setviewCardPos] = useState(0);
+  const viewCardRef = useRef(null);
+  const tabRef = useRef(null);
+
+  useEffect(() => {
+    if (viewCardRef.current) {
+      const rect = viewCardRef.current.getBoundingClientRect();
+      setviewCardPos(rect.left);
+    }
+
+    if (tabRef.current) {
+      setleft(tabRef.current.getBoundingClientRect().left);
+      setwidth(tabRef.current.getBoundingClientRect().width);
+    }
+  }, []);
+
   return (
     <Card
       className={
@@ -21,12 +41,50 @@ const Header = () => {
           Manage your tasks efficiently and effectively
         </CardDescription>
       </CardHeader>
-      <CardFooter>
-        <div className="flex gap-3 bg-secondary select-none text-secondary-foreground rounded-2xl p-5 shadow-sm shadow-muted-foreground/20">
-          <div className="flex items-center gap-2 cursor-pointer">
+
+      <CardFooter className={"p-0 w-50"}>
+        <div
+          ref={viewCardRef}
+          className="flex relative gap-3 bg-secondary justify-center select-none text-secondary-foreground rounded-2xl w-full px-0 py-3 shadow-sm shadow-muted-foreground/20 overflow-hidden"
+        >
+          <motion.div
+            animate={{
+              left: left - viewCardPos,
+              width: width,
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="bg-accent top-1/2 -translate-y-1/2 left-0 rounded-xl absolute h-3/4 z-0"
+          ></motion.div>
+          <div
+            ref={tabRef}
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setleft(rect.left);
+              setwidth(rect.width);
+              setview("list");
+            }}
+            className={`flex items-center justify-center w-1/2 gap-2  rounded cursor-pointer relative z-10 transition-colors ${
+              view === "list"
+                ? "text-primary-foreground"
+                : "text-secondary-foreground"
+            }`}
+          >
             <List size={20} /> <p className="text-xl">List</p>
           </div>
-          <div className="flex items-center gap-2 cursor-pointer">
+
+          <div
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setleft(rect.left);
+              setwidth(rect.width);
+              setview("grid");
+            }}
+            className={`flex items-center justify-center w-1/2 gap-2 cursor-pointer relative z-10 transition-colors ${
+              view === "grid"
+                ? "text-primary-foreground"
+                : "text-secondary-foreground"
+            }`}
+          >
             <Grid size={20} /> <p className="text-xl">Grid</p>
           </div>
         </div>
