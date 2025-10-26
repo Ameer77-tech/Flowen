@@ -22,32 +22,39 @@ import {
 } from "lucide-react";
 import profile from "@/public/pro.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const AppSideBar = () => {
   const tabs = [
     {
       name: "Dashboard",
       icon: Home,
+      link: "/",
     },
     {
       name: "Tasks",
       icon: NotepadText,
+      link: "tasks",
     },
     {
       name: "Projects",
       icon: BookMarked,
+      link: "/projects",
     },
     {
       name: "Analytics",
       icon: HeartPulse,
+      link: "/analytics",
     },
     {
       name: "Notifications",
       icon: Bell,
+      link: "/notifications",
     },
     {
       name: "Settings",
       icon: Settings2,
+      link: "/settings",
     },
   ];
   return (
@@ -77,10 +84,10 @@ const AppSideBar = () => {
                 {tabs.map((item) => (
                   <SidebarMenuItem key={item.name}>
                     <SidebarMenuButton variant="outline" size asChild>
-                      <a href={item.name}>
+                      <Link href={item.link}>
                         <item.icon />
                         <span>{item.name}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
