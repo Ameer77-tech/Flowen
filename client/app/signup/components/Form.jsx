@@ -14,9 +14,9 @@ import React from "react";
 
 const Form = () => {
   return (
-    <Card className="w-full sm:w-3/4 md:w-2/3 lg:w-2/5">
+    <Card className="w-full border-0 sm:w-3/4 md:w-2/3 lg:w-2/5">
       <CardHeader className={"mb-5"}>
-        <CardTitle className="text-3xl text-primary md:text-4xl lg:text-5xl">
+        <CardTitle className="text-3xl font-medium tracking-tighter text-primary md:text-4xl lg:text-5xl">
           Create Your Account
         </CardTitle>
         <CardDescription className="text-sm md:text-base lg:text-lg">
@@ -46,7 +46,7 @@ const Form = () => {
           </Button>
         </form>
         <div className="border-accent w-full h-[1px] border relative my-10">
-          <span className="text-muted-foreground bg-background absolute left-1/2 -translate-x-1/2 -top-3 w-40 lg:w-50 text-center">
+          <span className="text-muted-foreground bg-card absolute left-1/2 -translate-x-1/2 -top-3 w-40 lg:w-50 text-center">
             Or Continue With
           </span>
         </div>

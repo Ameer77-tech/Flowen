@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./Header";
 import Cards from "./Cards";
 import Charts from "./Charts";
-import Recent from "./Recent";
+import Recent from "./Activity";
 
 const Dashboard = () => {
   return (

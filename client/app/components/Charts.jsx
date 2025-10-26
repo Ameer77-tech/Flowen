@@ -22,9 +22,7 @@ const Charts = () => {
     { name: "Pending", value: 30 },
     { name: "Overdue", value: 200 },
   ];
-  const PIE_COLORS = ["#2f639e", "#f7f71e", "#EF4444"]; // green, yellow, red
-
-  // Line Chart Data (Tasks Completed Over a Week)
+  const PIE_COLORS = ["#2f639e", "#f7f71e", "#EF4444"];
   const lineData = [
     { day: "Mon", completed: 5 },
     { day: "Tue", completed: 8 },
@@ -46,15 +44,18 @@ const Charts = () => {
               data={pieData}
               dataKey="value"
               nameKey="name"
-              
               label={({ name, percent }) =>
                 `${name} ${(percent * 100).toFixed(0)}%`
               }
             >
               {pieData.map((entry, index) => (
                 <Cell
+                  fill={PIE_COLORS[index]}
+                  stroke="#fff"
+                  strokeWidth={0}
+                  style={{ cursor: "pointer", transition: "transform 0.3s" }}
                   key={`cell-${index}`}
-                  fill={PIE_COLORS[index % PIE_COLORS.length]}
+                 
                 />
               ))}
             </Pie>
@@ -63,9 +64,7 @@ const Charts = () => {
           </PieChart>
         </ResponsiveContainer>
       </div>
-
-      {/* Line Chart */}
-      <div className="w-full h-80  rounded-2xl p-4 shadow-lg">
+      <div className="w-full h-80 rounded-2xl p-4 shadow-lg">
         <h3 className="text-lg font-semibold mb-2">
           Tasks Completed Over the Week
         </h3>
@@ -79,7 +78,19 @@ const Charts = () => {
             <YAxis
               label={{ value: "Tasks", angle: -90, position: "insideLeft" }}
             />
-            <Tooltip />
+            <Tooltip
+              itemStyle={{
+                color: "black",
+              }}
+              labelStyle={{
+                color: "var(--accent)",
+              }}
+              contentStyle={{
+                backgroundColor: "var(--foreground)",
+                borderRadius: "8px",
+                border: "none",
+              }}
+            />
             <Legend verticalAlign="bottom" height={36} />
             <Line
               type="monotone"
