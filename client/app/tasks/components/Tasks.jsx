@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Tasks = ({ view, filter }) => {
   const tasks = [
@@ -121,7 +122,8 @@ const Tasks = ({ view, filter }) => {
 
   return (
     <div className="mt-2">
-      <Table className={""}>
+      {/* PC */}
+      <Table className={"hidden md:inline-table"}>
         <TableCaption className={"mb-3"}>{filter} Tasks</TableCaption>
         <TableHeader className={"bg-gray-600/30 text-center select-none"}>
           <TableRow className={"select-none"}>
@@ -145,6 +147,20 @@ const Tasks = ({ view, filter }) => {
           ))}
         </TableBody>
       </Table>
+      {/* PC */}
+      {/* Mobile */}
+      <div className="flex flex-col gap-5 p-5 md:hidden">
+        {tasks.map((task, idx) => (
+          <Card className={""}>
+            <CardHeader className={"p-0"}>
+              <div>
+              <CardTitle>{task.name}</CardTitle>
+              <CardDescription className={"text-xs"}>{task.description}</CardDescription>
+              </div>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };

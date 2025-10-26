@@ -6,21 +6,21 @@ import React, { useState } from "react";
 
 const Filter = ({ filter, setFilter }) => {
   return (
-    <div className="flex justify-between px-3">
-      <div className="w-1/2 flex items-center gap-2 bg-secondary rounded-2xl p-1 px-3">
+    <div className="md:flex md:flex-row flex-col md:justify-between px-3 md:mt-0 mt-5">
+      <div className="md:w-1/2 w-full flex items-center gap-2 bg-secondary rounded-2xl p-1 px-3">
         <Search color="#93959a" />
         <Input
           className={"text-secondary-foreground border-0 p-2"}
           placeholder={"Search for tasks by title or description"}
         />
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="md:flex gap-2 items-center grid grid-cols-2 md:mt-0 mt-5 place-items-center">
         {["All", "Completed", "Pending", "In-progress"].map((name, idx) => (
           <div
             onClick={() => setFilter(name)}
             key={idx}
             className={clsx(
-              "select-none shadow-sm shadow-muted-foreground/20 rounded-2xl px-5 py-2 cursor-pointer",
+              "select-none shadow-sm md:w-auto w-full shadow-muted-foreground/20 rounded-2xl px-5 py-2 cursor-pointer",
               filter == name ? "bg-accent" : "bg-secondary"
             )}
           >

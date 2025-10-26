@@ -32,17 +32,17 @@ const Header = ({ view, setview }) => {
   return (
     <Card
       className={
-        "bg-transparent border-0 flex flex-row justify-between items-center"
+        "bg-transparent md:border-0 border-b rounded-none flex flex-row md:justify-between justify-center items-center"
       }
     >
-      <CardHeader className={"w-1/2 place-items-start gap-0"}>
+      <CardHeader className={"md:w-1/2 w-full md:place-items-start place-items-center gap-0"}>
         <CardTitle className={"text-4xl"}>My Tasks</CardTitle>
         <CardDescription>
           Manage your tasks efficiently and effectively
         </CardDescription>
       </CardHeader>
 
-      <CardFooter className={"p-0 w-50"}>
+      <CardFooter className={"p-0 w-50 md:block hidden"}>
         <div
           ref={viewCardRef}
           className="flex relative gap-3 bg-secondary justify-center select-none text-secondary-foreground rounded-2xl w-full px-0 py-3 shadow-sm shadow-muted-foreground/20 overflow-hidden"
