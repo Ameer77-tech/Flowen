@@ -9,8 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Check, PenSquare } from "lucide-react";
-import clsx from "clsx";
 
 const Tasks = ({ view, filter }) => {
   const tasks = [
@@ -122,9 +120,9 @@ const Tasks = ({ view, filter }) => {
   ];
 
   return (
-    <div className="mt-10">
+    <div className="mt-2">
       <Table className={""}>
-        <TableCaption>{filter} Tasks</TableCaption>
+        <TableCaption className={"mb-3"}>{filter} Tasks</TableCaption>
         <TableHeader className={"bg-gray-600/30 text-center select-none"}>
           <TableRow className={"select-none"}>
             <TableHead className={"md:w-[300px] pl-5"}>Task</TableHead>
@@ -136,36 +134,14 @@ const Tasks = ({ view, filter }) => {
         </TableHeader>
         <TableBody className={"bg-secondary"}>
           {tasks.map((task, idx) => (
-            <TableRow key={idx} className={"h-20"}>
-              <TableCell>
-                <div className="flex flex-col gap-1">
-                  <p>{task.name}</p>
-                  <p className="text-muted-foreground">{task.description}</p>
-                </div>
-              </TableCell>
-              <TableCell>{task.dueDate}</TableCell>
-              <TableCell>
-                <p
-                  className={clsx(
-                    "w-15 text-center rounded-xl ",
-                    task.priority == "High"
-                      ? "bg-destructive/30 text-destructive"
-                      : task.priority == "Medium"
-                      ? "bg-yellow-600/30 text-yellow-500"
-                      : "bg-accent/30 text-blue-500"
-                  )}
-                >
-                  {task.priority}
-                </p>
-              </TableCell>
-              <TableCell>{task.timer}</TableCell>
-              <TableCell className={""}>
-                <div className="flex gap-5">
-                  <Check size={20} />
-                  <PenSquare size={20} />
-                </div>
-              </TableCell>
-            </TableRow>
+            <Task
+              key={task.name}
+              name={task.name}
+              desc={task.description}
+              priority={task.priority}
+              timer={task.timer}
+              due={task.dueDate}
+            />
           ))}
         </TableBody>
       </Table>

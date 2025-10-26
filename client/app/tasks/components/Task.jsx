@@ -1,9 +1,50 @@
-import React from 'react'
-
-const Task = () => {
+import React from "react";
+import {
+  Check,
+  PauseCircle,
+  PenSquare,
+  PlayCircle,
+  RotateCcw,
+} from "lucide-react";
+import clsx from "clsx";
+import { TableCell, TableRow } from "@/components/ui/table";
+const Task = ({ name, desc, due, timer, priority }) => {
   return (
-    <div>Task</div>
-  )
-}
+    <TableRow className={"h-20"}>
+      <TableCell>
+        <div className="flex flex-col gap-1">
+          <p>{name}</p>
+          <p className="text-muted-foreground">{desc}</p>
+        </div>
+      </TableCell>
+      <TableCell>{due}</TableCell>
+      <TableCell>
+        <p
+          className={clsx(
+            "w-15 text-center rounded-xl ",
+            priority == "High"
+              ? "bg-destructive/30 text-destructive"
+              : priority == "Medium"
+              ? "bg-yellow-600/30 text-yellow-500"
+              : "bg-accent/30 text-blue-500"
+          )}
+        >
+          {priority}
+        </p>
+      </TableCell>
+      <TableCell>
+        <div className="flex gap-2 items-center">
+          {timer} <PlayCircle size={25} color="#2f639e"></PlayCircle>
+        </div>
+      </TableCell>
+      <TableCell className={""}>
+        <div className="flex gap-5">
+          <Check size={20} />
+          <PenSquare size={20} />
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+};
 
-export default Task
+export default Task;
