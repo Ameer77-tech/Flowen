@@ -4,8 +4,7 @@ import clsx from "clsx";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
 
-const Filter = () => {
-  const [active, setactive] = useState("All");
+const Filter = ({ filter, setFilter }) => {
   return (
     <div className="flex justify-between px-3">
       <div className="w-1/2 flex items-center gap-2 bg-secondary rounded-2xl p-1 px-3">
@@ -18,11 +17,11 @@ const Filter = () => {
       <div className="flex gap-2 items-center">
         {["All", "Completed", "Pending", "In-progress"].map((name, idx) => (
           <div
-            onClick={() => setactive(name)}
+            onClick={() => setFilter(name)}
             key={idx}
             className={clsx(
               "select-none shadow-sm shadow-muted-foreground/20 rounded-2xl px-5 py-2 cursor-pointer",
-              active == name ? "bg-accent" : "bg-secondary"
+              filter == name ? "bg-accent" : "bg-secondary"
             )}
           >
             {name}
