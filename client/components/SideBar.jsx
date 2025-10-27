@@ -20,9 +20,10 @@ import {
   NotepadText,
   Settings2,
 } from "lucide-react";
-import profile from "@/public/pro.png";
+import logo from "@/public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
+import profile from "@/public/pro.png";
 
 const AppSideBar = () => {
   const tabs = [
@@ -61,19 +62,17 @@ const AppSideBar = () => {
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex justify-start px-3 py-2 gap-2 items-center lg:h-17 h-15 lg:mt-5">
+          <div className="flex justify-start px-3 py-2 items-center lg:h-17 h-15 lg:mt-5">
             <div className="h-full justify-center items-center flex relative">
               <Image
-                src={profile}
-                width={500}
-                height={500}
+                src={logo}
+                width={800}
+                height={598}
                 alt="profile"
-                className="w-full h-full"
+                className="w-12 h-10"
               ></Image>
             </div>
-            <div className="flex flex-col justify-center items-center leading-7">
-              <h3 className="font-semibold">Ameer</h3>
-            </div>
+            <p className="text-4xl">xTask</p>
           </div>
         </SidebarHeader>
         <SidebarContent>
