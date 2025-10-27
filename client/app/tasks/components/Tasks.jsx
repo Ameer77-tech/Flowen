@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import MobileTask from "./MobileTask";
 
 const Tasks = ({ view, filter }) => {
   const tasks = [
@@ -19,6 +19,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-02",
       timer: "02:30:00",
       priority: "High",
+      status: "Completed",
     },
     {
       name: "Fix Authentication Bug",
@@ -26,6 +27,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-10-29",
       timer: "01:15:00",
       priority: "Medium",
+      status: "Pending",
     },
     {
       name: "Database Optimization",
@@ -33,6 +35,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-05",
       timer: "03:45:00",
       priority: "High",
+      status: "Pending",
     },
     {
       name: "Client Feedback Review",
@@ -40,6 +43,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-10-28",
       timer: "00:45:00",
       priority: "Low",
+      status: "Completed",
     },
     {
       name: "Email Template Redesign",
@@ -47,6 +51,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-10",
       timer: "01:00:00",
       priority: "Medium",
+      status: "Pending",
     },
     {
       name: "Implement Dark Mode",
@@ -54,6 +59,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-01",
       timer: "02:15:00",
       priority: "High",
+      status: "Completed",
     },
     {
       name: "Set Up Analytics",
@@ -61,6 +67,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-03",
       timer: "01:40:00",
       priority: "Medium",
+      status: "Pending",
     },
     {
       name: "Deploy Backend API",
@@ -68,6 +75,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-10-30",
       timer: "01:10:00",
       priority: "High",
+      status: "Completed",
     },
     {
       name: "Create Onboarding Guide",
@@ -75,6 +83,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-06",
       timer: "02:00:00",
       priority: "Low",
+      status: "Pending",
     },
     {
       name: "Setup CI/CD Pipeline",
@@ -82,6 +91,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-04",
       timer: "02:20:00",
       priority: "High",
+      status: "Completed",
     },
     {
       name: "Optimize Images",
@@ -89,6 +99,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-10-31",
       timer: "00:50:00",
       priority: "Medium",
+      status: "Pending",
     },
     {
       name: "Team Meeting",
@@ -96,6 +107,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-10-27",
       timer: "01:00:00",
       priority: "Low",
+      status: "Completed",
     },
     {
       name: "API Documentation Update",
@@ -103,6 +115,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-07",
       timer: "01:30:00",
       priority: "Medium",
+      status: "Pending",
     },
     {
       name: "Fix Responsive Issues",
@@ -110,6 +123,7 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-08",
       timer: "02:10:00",
       priority: "High",
+      status: "Completed",
     },
     {
       name: "Add User Roles",
@@ -117,11 +131,12 @@ const Tasks = ({ view, filter }) => {
       dueDate: "2025-11-09",
       timer: "03:00:00",
       priority: "High",
+      status: "Pending",
     },
   ];
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 rounded-2xl overflow-hidden">
       {/* PC */}
       <Table className={"hidden md:inline-table"}>
         <TableCaption className={"mb-3"}>{filter} Tasks</TableCaption>
@@ -150,17 +165,10 @@ const Tasks = ({ view, filter }) => {
       {/* PC */}
       {/* Mobile */}
       <div className="flex flex-col gap-5 p-5 md:hidden">
-        {tasks.map((task, idx) => (
-          <Card className={""}>
-            <CardHeader className={"p-0"}>
-              <div>
-              <CardTitle>{task.name}</CardTitle>
-              <CardDescription className={"text-xs"}>{task.description}</CardDescription>
-              </div>
-            </CardHeader>
-          </Card>
-        ))}
-      </div>
+      {tasks.map((task, idx) => (
+        <MobileTask key={idx} name={task.name} desc={task.description} due={task.dueDate} status={task.status} priority={task.priority} timer={task.timer}/>
+          ))}
+    </div>
     </div>
   );
 };

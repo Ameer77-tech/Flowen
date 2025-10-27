@@ -8,7 +8,7 @@ const Main = () => {
   const [view, setview] = useState("list");
   const [filter, setfilter] = useState("All");
   return (
-    <div className="md:p-20 w-full">
+    <div className="md:p-20 w-full overflow-scroll">
       <Header view={view} setview={setview} />
       <Filter filter={filter} setFilter={setfilter} />
       <Tasks view={view} filter={filter} />
