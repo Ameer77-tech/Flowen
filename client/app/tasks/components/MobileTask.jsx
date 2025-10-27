@@ -22,7 +22,7 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
     <Card
       className={clsx(
         "border-1 border-gray-600/50 p-5",
-        status == "Completed" ? "opacity-50" : "opacity-100"
+        status == "Completed" ? "opacity-50 select-none pointer-events-none" : "opacity-100"
       )}
     >
       <CardHeader className={"p-0 grid-cols-3 items-start"}>
@@ -61,7 +61,7 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
             : priority + " priority"}
         </div>
       </CardContent>
-      <CardFooter className="px-0 mt-5 justify-between items-center">
+      <CardFooter className="px-0 mt-5 h-full justify-between items-end">
         <div className="text-lg">{timer}</div>
         <div className="flex gap-3 items-center">
           <div className="bg-accent shadow-[0_0_10px_#6366f1aa] w-15 h-15 rounded-full flex justify-center items-center hover:shadow-[0_0_15px_#6366f1] transition">

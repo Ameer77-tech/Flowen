@@ -2,7 +2,7 @@ import AppSideBar from "@/components/SideBar";
 import React from "react";
 import Dashboard from "./components/Dashboard";
 
-const page = () => {
+const page = async () => {
   return (
     <div className="h-screen w-screen flex justify-start">
       <AppSideBar />

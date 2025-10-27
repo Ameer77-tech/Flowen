@@ -3,6 +3,8 @@ import React from "react";
 import Main from "./components/Main";
 
 const page = async ({ params, searchParams }) => {
+  console.log("IN SERVER");
+  
   const parametre = await searchParams;
   const filter = parametre.filter || "all";
   const view = parametre.view || "list";

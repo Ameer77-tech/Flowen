@@ -62,14 +62,14 @@ const AppSideBar = () => {
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex justify-start px-3 py-2 items-center lg:h-17 h-15 lg:mt-5">
+          <div className="flex justify-start px-3 gap-3 py-2 items-center lg:h-17 h-15 lg:mt-5">
             <div className="h-full justify-center items-center flex relative">
               <Image
                 src={logo}
-                width={800}
-                height={598}
+                width={501}
+                height={498}
                 alt="profile"
-                className="w-12 h-10"
+                className="w-12 h-12"
               ></Image>
             </div>
             <p className="text-4xl">xTask</p>
