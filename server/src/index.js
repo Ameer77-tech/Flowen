@@ -1,13 +1,17 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import connectDB from "../config/dbConn.js";
 
 dotenv.config();
+await connectDB();
+
 const app = express();
 const PORT = process.env.PORT;
+const frontend = process.env.CLIENT_URL;
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [frontend],
   })
 );
 app.use(express.json());
