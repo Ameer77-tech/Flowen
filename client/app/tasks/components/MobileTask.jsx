@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 const MobileTask = ({ name, desc, due, status, priority, timer }) => {
+    
   return (
     <Card
       className={clsx(
@@ -30,11 +31,11 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
           <CardDescription className={"text-xs"}>{desc}</CardDescription>
         </div>
         <div className="flex gap-2 justify-end w-full">
-          <div className="bg-accent/30 w-8 h-8 rounded-full flex justify-center items-center">
-            <PenIcon size={15} color="blue" />
+          <div className="bg-accent/30 w-10 h-10 rounded-full flex justify-center items-center">
+            <PenIcon size={15} color="cyan" />
           </div>
-          <div className="bg-accent/30 w-8 h-8 rounded-full flex justify-center items-center">
-            <Check size={15} color="blue" />
+          <div className="bg-accent/30 w-10 h-10 rounded-full flex justify-center items-center">
+            <Check size={15} color="cyan" />
           </div>
         </div>
       </CardHeader>
@@ -61,15 +62,15 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
         </div>
       </CardContent>
       <CardFooter className="px-0 mt-5 justify-between items-center">
-        <div className="text-sm text-muted-foreground">{timer}</div>
+        <div className="text-lg">{timer}</div>
         <div className="flex gap-3 items-center">
-          <div className="bg-accent shadow-[0_0_10px_#6366f1aa] w-10 h-10 rounded-full flex justify-center items-center hover:shadow-[0_0_15px_#6366f1] transition">
-            <LucidePlay size={16} color="white" />
+          <div className="bg-accent shadow-[0_0_10px_#6366f1aa] w-15 h-15 rounded-full flex justify-center items-center hover:shadow-[0_0_15px_#6366f1] transition">
+            <LucidePlay size={20} color="white" fill="white"/>
           </div>
-          <div className="bg-accent/30 w-8 h-8 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
+          <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
             <Pause size={15} color="#3b82f6" />
           </div>
-          <div className="bg-accent/30 w-8 h-8 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
+          <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
             <RotateCcw size={15} color="#3b82f6" />
           </div>
         </div>

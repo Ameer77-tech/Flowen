@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import MobileTask from "./MobileTask";
+import clsx from "clsx";
 
 const Tasks = ({ view, filter }) => {
   const tasks = [
@@ -134,11 +135,29 @@ const Tasks = ({ view, filter }) => {
       status: "Pending",
     },
   ];
+  const sortedTasks = tasks.sort((a, b) => {
+    const order = {
+      Completed: 3, // bottom-most
+      Low: 2, // just above completed
+      Medium: 1,
+      High: 0, // top
+    };
+
+    const aRank = a.status === "Completed" ? 3 : order[a.priority] ?? 99;
+    const bRank = b.status === "Completed" ? 3 : order[b.priority] ?? 99;
+
+    return aRank - bRank;
+  });
 
   return (
     <div className="mt-2 rounded-2xl overflow-hidden">
       {/* PC */}
-      <Table className={"hidden md:inline-table"}>
+      <Table
+        className={clsx(
+          "",
+          view == "list" ? "hidden md:inline-table" : "md:hidden"
+        )}
+      >
         <TableCaption className={"mb-3"}>{filter} Tasks</TableCaption>
         <TableHeader className={"bg-gray-600/30 text-center select-none"}>
           <TableRow className={"select-none"}>
@@ -150,7 +169,7 @@ const Tasks = ({ view, filter }) => {
           </TableRow>
         </TableHeader>
         <TableBody className={"bg-secondary"}>
-          {tasks.map((task, idx) => (
+          {sortedTasks.map((task, idx) => (
             <Task
               key={task.name}
               name={task.name}
@@ -164,11 +183,24 @@ const Tasks = ({ view, filter }) => {
       </Table>
       {/* PC */}
       {/* Mobile */}
-      <div className="flex flex-col gap-5 p-5 md:hidden">
-      {tasks.map((task, idx) => (
-        <MobileTask key={idx} name={task.name} desc={task.description} due={task.dueDate} status={task.status} priority={task.priority} timer={task.timer}/>
-          ))}
-    </div>
+      <div
+        className={clsx(
+          "flex flex-col gap-5 p-5",
+          view == "grid" ? "md:grid md:grid-cols-3" : "md:hidden"
+        )}
+      >
+        {sortedTasks.map((task, idx) => (
+          <MobileTask
+            key={idx}
+            name={task.name}
+            desc={task.description}
+            due={task.dueDate}
+            status={task.status}
+            priority={task.priority}
+            timer={task.timer}
+          />
+        ))}
+      </div>
     </div>
   );
 };
