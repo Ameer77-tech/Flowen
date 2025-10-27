@@ -158,7 +158,7 @@ const Tasks = ({ view, filter }) => {
           view == "list" ? "hidden md:inline-table" : "md:hidden"
         )}
       >
-        <TableCaption className={"mb-3"}>{filter} Tasks</TableCaption>
+        <TableCaption className={"mb-3 capitalize"}>{filter} Tasks</TableCaption>
         <TableHeader className={"bg-gray-600/30 text-center select-none"}>
           <TableRow className={"select-none"}>
             <TableHead className={"md:w-[300px] pl-5"}>Task</TableHead>
