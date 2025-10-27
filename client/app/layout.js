@@ -4,7 +4,7 @@ import ProgressBar from "@/components/ProgressBar";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="root">
       <body className={`${outfit.className} antialiased`}>
         <ProgressBar />
         {children}

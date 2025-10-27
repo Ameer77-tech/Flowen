@@ -452,7 +452,7 @@ export default function TodaysTasks() {
               <div
                 key={task.name}
                 className={clsx(
-                  "flex md:flex-row flex-col  md:items-center gap-4 justify-between p-5 rounded-lg transition",
+                  "flex md:flex-row flex-col light:bg-secondary md:items-center gap-4 justify-between p-5 rounded-lg transition",
                   task.status === "Completed"
                     ? "bg-gray-800/30 text-muted-foreground "
                     : "bg-gray-800/60 hover:bg-gray-800 active:bg-accent/40"
