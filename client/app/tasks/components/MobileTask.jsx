@@ -14,6 +14,7 @@ import {
   PenIcon,
   LucidePlay,
   RotateCcw,
+  Trash2,
 } from "lucide-react";
 import clsx from "clsx";
 const MobileTask = ({ name, desc, due, status, priority, timer }) => {
@@ -67,11 +68,14 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
           <div className="bg-accent shadow-[0_0_10px_#6366f1aa] w-15 h-15 rounded-full flex justify-center items-center hover:shadow-[0_0_15px_#6366f1] transition">
             <LucidePlay size={20} color="white" fill="white"/>
           </div>
-          <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
+          {/* <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
             <Pause size={15} color="#3b82f6" />
-          </div>
+          </div> */}
           <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
             <RotateCcw size={15} color="#3b82f6" />
+          </div>
+          <div className="bg-destructive/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-destructive/50 transition">
+            <Trash2 size={15} color="red" />
           </div>
         </div>
       </CardFooter>

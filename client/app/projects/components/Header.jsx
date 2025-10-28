@@ -1,3 +1,5 @@
+import React from "react";
+import NewProBtn from "./NewProBtn";
 import {
   Card,
   CardDescription,
@@ -5,9 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import ViewToggle from "./ViewToggle";
-
-const Header = ({ view }) => {
+const Header = () => {
   return (
     <Card
       className={
@@ -19,12 +19,12 @@ const Header = ({ view }) => {
           "md:w-1/2 w-full md:place-items-start place-items-center gap-0"
         }
       >
-        <CardTitle className={"text-4xl"}>My Tasks</CardTitle>
+        <CardTitle className={"text-4xl"}>Projects</CardTitle>
         <CardDescription>
-          Manage your tasks efficiently and effectively
+          A simplified overview of your projects  
         </CardDescription>
       </CardHeader>
-      <ViewToggle view={view} />
+      <NewProBtn />
     </Card>
   );
 };

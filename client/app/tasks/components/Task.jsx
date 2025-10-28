@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Check,
-  PauseCircle,
-  PenSquare,
-  PlayCircle,
-  RotateCcw,
-} from "lucide-react";
+import { Check, PenSquare, PlayCircle, Trash2 } from "lucide-react";
 import clsx from "clsx";
 import { TableCell, TableRow } from "@/components/ui/table";
 const Task = ({ name, desc, due, timer, priority }) => {
@@ -41,6 +35,8 @@ const Task = ({ name, desc, due, timer, priority }) => {
         <div className="flex gap-5">
           <Check size={20} />
           <PenSquare size={20} />
+          <Trash2 size={20} color="red" />
+        
         </div>
       </TableCell>
     </TableRow>
