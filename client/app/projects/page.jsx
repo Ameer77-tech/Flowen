@@ -4,7 +4,7 @@ import Main from "./components/Main";
 
 const page = async ({ params, searchParams }) => {
   const urlData = await searchParams;
-  const filter = urlData.filter;
+  const filter = urlData.filter || "all";
   const data = [
     {
       id: "PRJ-001",

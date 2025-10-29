@@ -1,3 +1,4 @@
+"use client";
 import {
   Sidebar,
   SidebarProvider,
@@ -24,40 +25,21 @@ import logo from "@/public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import profile from "@/public/pro.png";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 const AppSideBar = () => {
+  const path = usePathname();
+
   const tabs = [
-    {
-      name: "Dashboard",
-      icon: Home,
-      link: "/",
-    },
-    {
-      name: "Tasks",
-      icon: NotepadText,
-      link: "tasks",
-    },
-    {
-      name: "Projects",
-      icon: BookMarked,
-      link: "/projects",
-    },
-    {
-      name: "Analytics",
-      icon: HeartPulse,
-      link: "/analytics",
-    },
-    {
-      name: "Notifications",
-      icon: Bell,
-      link: "/notifications",
-    },
-    {
-      name: "Settings",
-      icon: Settings2,
-      link: "/settings",
-    },
+    { name: "Dashboard", icon: Home, link: "/" },
+    { name: "Tasks", icon: NotepadText, link: "/tasks" },
+    { name: "Projects", icon: BookMarked, link: "/projects" },
+    { name: "Analytics", icon: HeartPulse, link: "/analytics" },
+    { name: "Notifications", icon: Bell, link: "/notifications" },
+    { name: "Settings", icon: Settings2, link: "/settings" },
   ];
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -68,32 +50,49 @@ const AppSideBar = () => {
                 src={logo}
                 width={501}
                 height={498}
-                alt="profile"
+                alt="logo"
                 className="w-12 h-12"
-              ></Image>
+              />
             </div>
             <p className="text-4xl">xTask</p>
           </div>
         </SidebarHeader>
+
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Application</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {tabs.map((item) => (
-                  <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton variant="outline" size asChild>
-                      <Link href={item.link}>
-                        <item.icon />
-                        <span>{item.name}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {tabs.map((item) => {
+                  const isActive =
+                    item.link === "/"
+                      ? path === "/"
+                      : path.startsWith(item.link);
+
+                  return (
+                    <SidebarMenuItem key={item.name}>
+                      <SidebarMenuButton
+                        asChild
+                        className={clsx(
+                          "flex items-center gap-2 transition-colors",
+                          isActive
+                            ? "text-accent underline font-semibold"
+                            : "text-secondary-foreground"
+                        )}
+                      >
+                        <Link href={item.link}>
+                          <item.icon className="w-5 h-5" />
+                          <span>{item.name}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
+
         <SidebarFooter>
           <div className="flex justify-start px-3 py-2 gap-2 items-start lg:h-17 h-15 lg:mt-5">
             <div className="h-full justify-center items-center flex relative">
@@ -103,7 +102,7 @@ const AppSideBar = () => {
                 height={500}
                 alt="profile"
                 className="w-full h-full"
-              ></Image>
+              />
             </div>
             <div className="flex flex-col leading-7">
               <h3 className="font-semibold">Ameer</h3>
@@ -112,6 +111,7 @@ const AppSideBar = () => {
           </div>
         </SidebarFooter>
       </Sidebar>
+
       <SidebarTrigger />
     </SidebarProvider>
   );
