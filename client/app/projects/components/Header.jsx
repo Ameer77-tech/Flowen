@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <Card
       className={
-        "bg-transparent md:border-0 border-b-2 border-t-0 border-l-0 rounded-none flex flex-row md:justify-between justify-center items-center"
+        "bg-transparent md:border-0 border-b-2 border-t-0 border-l-0 rounded-none flex md:flex-row md:justify-between justify-center items-center"
       }
     >
       <CardHeader

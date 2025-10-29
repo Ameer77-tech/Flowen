@@ -2,7 +2,9 @@ import AppSideBar from "@/components/SideBar";
 import React from "react";
 import Main from "./components/Main";
 
-const page = () => {
+const page = async ({ params, searchParams }) => {
+  const urlData = await searchParams;
+  const filter = urlData.filter;
   const data = [
     {
       id: "PRJ-001",
@@ -129,7 +131,7 @@ const page = () => {
   return (
     <div className="h-screen w-screen flex justify-start">
       <AppSideBar />
-      <Main data={data} />
+      <Main data={data} filter={filter} />
     </div>
   );
 };

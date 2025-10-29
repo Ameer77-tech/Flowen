@@ -1,12 +1,14 @@
 import React from "react";
 import Header from "./Header";
 import Cards from "./Cards";
+import Filter from "./Filter";
 
-const Main = ({ data }) => {
+const Main = ({ data, filter }) => {
   return (
     <div className="md:p-10 w-full overflow-scroll">
       <Header />
-      <Cards data={data}/>
+      <Filter filter={filter} />
+      <Cards data={data} />
     </div>
   );
 };
