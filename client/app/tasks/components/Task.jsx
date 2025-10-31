@@ -1,5 +1,12 @@
 import React from "react";
-import { Check, PenSquare, PlayCircle, Trash2 } from "lucide-react";
+import {
+  Check,
+  Pause,
+  PenSquare,
+  PlayCircle,
+  PlayIcon,
+  Trash2,
+} from "lucide-react";
 import clsx from "clsx";
 import { TableCell, TableRow } from "@/components/ui/table";
 const Task = ({ name, desc, due, timer, priority }) => {
@@ -27,8 +34,10 @@ const Task = ({ name, desc, due, timer, priority }) => {
         </p>
       </TableCell>
       <TableCell>
-        <div className="flex gap-2 items-center">
-          {timer} <PlayCircle size={25} color="#2f639e"></PlayCircle>
+        <div className="flex items-center gap-2">
+          {timer}
+          <PlayIcon size={25} color="#2f639e" fill="#2f639e" />
+          <Pause />
         </div>
       </TableCell>
       <TableCell className={""}>
@@ -36,7 +45,6 @@ const Task = ({ name, desc, due, timer, priority }) => {
           <Check size={20} />
           <PenSquare size={20} />
           <Trash2 size={20} color="red" />
-        
         </div>
       </TableCell>
     </TableRow>

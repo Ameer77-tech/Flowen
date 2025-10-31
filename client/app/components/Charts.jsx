@@ -13,6 +13,8 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  BarChart,
+  Bar,
 } from "recharts";
 
 const Charts = () => {
@@ -39,29 +41,26 @@ const Charts = () => {
       <div className="w-full h-80 rounded-2xl p-4 shadow-lg">
         <h3 className="text-lg font-semibold mb-2">Task Status</h3>
         <ResponsiveContainer width="100%" height="90%">
-          <PieChart>
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              label={({ name, percent }) =>
-                `${name} ${(percent * 100).toFixed(0)}%`
-              }
-            >
-              {pieData.map((entry, index) => (
-                <Cell
-                  fill={PIE_COLORS[index]}
-                  stroke="#fff"
-                  strokeWidth={0}
-                  style={{ cursor: "pointer", transition: "transform 0.3s" }}
-                  key={`cell-${index}`}
-                 
-                />
-              ))}
-            </Pie>
-            <Tooltip formatter={(value) => `${value} tasks`} />
+          <BarChart data={pieData}>
+            <XAxis dataKey="name" tick={{ fill: "#94a3b8" }} />
+            <YAxis tick={{ fill: "#94a3b8" }} />
+            <Tooltip
+              itemStyle={{
+                color: "black",
+              }}
+              labelStyle={{
+                color: "var(--accent)",
+              }}
+              formatter={(value) => `${value} tasks`}
+            />
             <Legend verticalAlign="bottom" height={36} />
-          </PieChart>
+            <Bar
+              dataKey="value"
+              fill="var(--accent)"
+              radius={[8, 8, 0, 0]}
+              style={{ transition: "all 0.3s ease-in-out" }}
+            />
+          </BarChart>
         </ResponsiveContainer>
       </div>
       <div className="w-full h-80 rounded-2xl p-4 shadow-lg">
