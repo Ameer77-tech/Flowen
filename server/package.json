@@ -15,7 +15,12 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "install": "^0.13.0",
     "mongoose": "^8.16.4",
+    "npm": "^11.6.2",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0",
     "rate-limit": "^0.1.1"
   },
   "devDependencies": {
