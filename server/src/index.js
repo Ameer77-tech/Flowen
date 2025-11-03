@@ -1,11 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import cors from "cors";
 import connectDB from "../config/dbConn.js";
 import passport from "passport";
 import googleAuthRouter from "../routes/auth.google.js";
+import "../lib/passport.js";
 
-dotenv.config();
 await connectDB();
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(
     origin: [frontend],
   })
 );
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -27,7 +29,7 @@ app.get("/login", (req, res) => {
   );
 });
 app.get("/", (req, res) => {
-  res.send("running");
+  console.log(req);
 });
 
 app.listen(PORT, () => {
