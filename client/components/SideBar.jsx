@@ -28,7 +28,7 @@ import profile from "@/public/pro.png";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
-const AppSideBar = () => {
+const AppSideBar = ({ userData }) => {
   const path = usePathname();
 
   const tabs = [
@@ -96,17 +96,17 @@ const AppSideBar = () => {
         <SidebarFooter>
           <div className="flex justify-start px-3 py-2 gap-2 items-start lg:h-17 h-15 lg:mt-5">
             <div className="h-full justify-center items-center flex relative">
-              <Image
-                src={profile}
+              <img
+                src={userData.reply.avatar}
                 width={500}
                 height={500}
                 alt="profile"
-                className="w-full h-full"
+                className="w-full h-full rounded-full"
               />
             </div>
             <div className="flex flex-col leading-7">
-              <h3 className="font-semibold">Ameer</h3>
-              <p className="text-muted text-xs">ameershaik.cs@gmail.com</p>
+              <h3 className="font-semibold">{userData?.reply.displayName}</h3>
+              <p className="text-muted text-xs">{userData?.reply.email}</p>
             </div>
           </div>
         </SidebarFooter>

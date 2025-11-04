@@ -52,13 +52,15 @@ const Form = () => {
             <Github />
             Github
           </Button>
-          <Button
-            variant="outline"
-            className="flex-1 flex items-center justify-center gap-2 active:bg-accent/50"
-          >
-            <GitBranch />
-            Google
-          </Button>
+          <a href={process.env.XTASK_BACKEND + "/api/auth/google"}>
+            <Button
+              variant="outline"
+              className="flex-1 flex items-center justify-center gap-2 active:bg-accent/50"
+            >
+              <GitBranch />
+              Google
+            </Button>
+          </a>
         </div>
       </CardContent>
       <CardFooter className="text-center text-sm text-muted-foreground mt-2">

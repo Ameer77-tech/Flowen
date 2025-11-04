@@ -9,10 +9,11 @@ export const generateToken = (payload) => {
 
 export const decodeToken = (req, res, next) => {
   const token = req.cookies.token;
+
   if (!token) {
-    res.status(401).json({ reply: "Unauthorized", success: false });
+   return res.status(401).json({ reply: "Unauthorized", success: false });
   }
   const userId = jwt.verify(token, "SECRET");
-  req.user.id = userId;
+  req.user = userId;
   next();
 };

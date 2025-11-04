@@ -12,13 +12,13 @@ googleAuthRouter.get(
     failureRedirect: "/login",
   }),
   (req, res) => {
-    const { user, token } = req.user;
+    const { token } = req.user;
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "lax",
     });
-    res.redirect("http://localhost:3001/");
+    res.redirect("http://localhost:3000/");
   }
 );
 
