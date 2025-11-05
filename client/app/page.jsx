@@ -27,8 +27,9 @@ const page = async () => {
   });
 
   const data = await res.json();
+  
 
-  if (data.reply.success) {
+  if (!data.success) {
     redirect("/login");
   }
 

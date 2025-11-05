@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { GitBranch, Github } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { GoogleButton, GithubButton } from "@/components/AuthBtns";
 
 const Form = () => {
   return (
@@ -45,22 +46,8 @@ const Form = () => {
           </span>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-          <Button
-            variant="outline"
-            className="flex-1 flex items-center justify-center gap-2 active:bg-accent/50"
-          >
-            <Github />
-            Github
-          </Button>
-          <a href={process.env.XTASK_BACKEND + "/api/auth/google"}>
-            <Button
-              variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 active:bg-accent/50"
-            >
-              <GitBranch />
-              Google
-            </Button>
-          </a>
+          <GithubButton />
+          <GoogleButton />
         </div>
       </CardContent>
       <CardFooter className="text-center text-sm text-muted-foreground mt-2">

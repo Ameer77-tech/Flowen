@@ -9,10 +9,13 @@ protectedRouter.get("/dashboard", async (req, res) => {
   const id = req.user.id;
   try {
     const user = await userModel.findOne({ _id: id });
+    if (user === null) {
+      return res.status(401).json({ reply: "Unauthorized", success: false });
+    }
     res.status(200).json({
       reply: {
         displayName: user.displayName,
-        email: user.email,
+        email: user.email ?? user.userName,
         avatar: user.avatar,
       },
       success: true,

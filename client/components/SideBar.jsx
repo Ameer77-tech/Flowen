@@ -106,7 +106,7 @@ const AppSideBar = ({ userData }) => {
             </div>
             <div className="flex flex-col leading-7">
               <h3 className="font-semibold">{userData?.reply.displayName}</h3>
-              <p className="text-muted text-xs">{userData?.reply.email}</p>
+              <p className="text-muted-foreground text-xs">{userData?.reply.email}</p>
             </div>
           </div>
         </SidebarFooter>
