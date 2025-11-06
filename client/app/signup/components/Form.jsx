@@ -28,8 +28,8 @@ const Form = () => {
         <form className="flex flex-col gap-4">
           <Input placeholder="Username" className={"lg:text-lg lg:py-2"} />
           <Input
-            placeholder="Email"
-            type="email"
+            placeholder="Display Name"
+            type="text"
             className={"lg:text-lg lg:py-2"}
           />
           <Input

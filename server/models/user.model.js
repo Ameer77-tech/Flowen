@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema(
   {
     userName: {
       type: "String",
+      unique: true,
     },
     displayName: {
       type: "String",
@@ -11,9 +12,9 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: function () {
-        return !this.googleId && !this.githubId;
+        return this.googleId && this.githubId;
       },
-      unique: true,
+      default: "",
       lowercase: true,
       trim: true,
     },

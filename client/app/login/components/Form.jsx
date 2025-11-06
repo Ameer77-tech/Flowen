@@ -27,7 +27,7 @@ const Form = () => {
       <CardContent className="space-y-4">
         <form className="flex flex-col gap-4">
           <Input
-            placeholder="Username or Email"
+            placeholder="Username"
             type="text"
             className={"lg:py-2"}
           />

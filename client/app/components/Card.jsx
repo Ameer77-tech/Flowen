@@ -12,7 +12,7 @@ const DashboardCard = ({ title, count, description, trend }) => {
     <Card className={"bg-secondary rounded-2xl border-0"}>
       <CardHeader className={"p-0 flex justify-between mb-2"}>
         <CardTitle className={"ml-5"}>{title}</CardTitle>
-        <p className="text-right text-foreground hidden lg:block md:block text-sm  sm:underline cursor-pointer mr-5">
+        <p className="text-right text-foreground hidden lg:block md:block text-sm hover:text-primary cursor-pointer mr-5">
           CHECK
         </p>
       </CardHeader>

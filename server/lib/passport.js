@@ -27,7 +27,6 @@ passport.use(
         avatar: profile.photos[0].value,
         provider: profile.provider,
       };
-      console.log(user);
 
       try {
         const userInDb = await userModel.findOne({ googleId: user.googleId });

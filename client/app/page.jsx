@@ -3,6 +3,7 @@ import React from "react";
 import Dashboard from "./components/Dashboard";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import UserInitaializer from "./initializers/user.initializer";
 const page = async () => {
   const cookieStore = await cookies();
 
@@ -27,15 +28,16 @@ const page = async () => {
   });
 
   const data = await res.json();
-  
 
   if (!data.success) {
     redirect("/login");
   }
+  
 
   return (
     <div className="h-screen w-screen flex justify-start">
-      <AppSideBar userData={data} />
+      <UserInitaializer userData={data} />
+      <AppSideBar />
       <Dashboard />
     </div>
   );

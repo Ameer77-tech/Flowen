@@ -9,6 +9,7 @@ import "../lib/passport.js";
 import cookieParser from "cookie-parser";
 import protectedRouter from "../routes/protected.js";
 import githubAuthRouter from "../routes/auth.github.js";
+import authRouter from "../routes/auth.js";
 
 
 await connectDB();
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth/google", googleAuthRouter);
 app.use("/api/auth/github", githubAuthRouter);
+app.use("/api/auth", authRouter)
 
 app.use("/api", protectedRouter)
 
