@@ -83,8 +83,10 @@ export const verifyUser = async (req, res) => {
   } else {
     try {
       const user = await userModel
-        .findOne({ userName: data.userName })
+        .findOne({ userName: data.userName, provider: "local" })
         .select("password");
+      console.log(user);
+
       if (!user) {
         return res
           .status(401)
@@ -105,7 +107,7 @@ export const verifyUser = async (req, res) => {
           });
           return res
             .status(200)
-            .json({ reply: "User Logged In", success: true });
+            .json({ reply: "Login Success", success: true });
         }
       }
     } catch (err) {
