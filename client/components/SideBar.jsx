@@ -31,7 +31,7 @@ import useUserStore from "@/app/Store/user.store";
 
 const AppSideBar = () => {
   const userData = useUserStore((state) => state);
-
+  
   const path = usePathname();
 
   const tabs = [
@@ -100,9 +100,7 @@ const AppSideBar = () => {
           <div className="flex justify-start px-3 py-2 gap-2 items-start lg:h-17 h-15 lg:mt-5">
             <div className="h-full justify-center items-center flex relative">
               <img
-                src={userData?.avatar || profile}
-                width={500}
-                height={500}
+                src={userData?.avatar || "/pro.png"}
                 alt="profile"
                 className="w-full h-full rounded-full"
               />
@@ -110,7 +108,7 @@ const AppSideBar = () => {
             <div className="flex flex-col leading-7">
               <h3 className="font-semibold">{userData?.displayName}</h3>
               <p className="text-muted-foreground text-xs">
-                {userData?.email || userData?.userName}
+                {userData?.email}
               </p>
             </div>
           </div>
