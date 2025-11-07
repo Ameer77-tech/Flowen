@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/jwt.js";
 import userModel from "../models/user.model.js";
 
@@ -16,22 +17,115 @@ export const registerUser = async (req, res) => {
       .status(400)
       .json({ reply: "All Fields Must be Filled", success: false });
   } else {
-    const user = {
-      userName: data.userName,
-      displayName: data.displayName,
-      password: data.password,
-    };
     try {
-      const created = await userModel.create(user);
-      const token = generateToken(created._id);
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+      const exists = await userModel.find({
+        userName: data.userName,
+        provider: "local",
       });
-      return res.status(200).json({ reply: "User Created", success: true });
+      if (exists.length) {
+        return res
+          .status(409)
+          .json({ reply: "User Already Exists", success: false });
+      } else {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const user = {
+          userName: data.userName,
+          displayName: data.displayName,
+          password: hashedPassword,
+          provider: "local",
+        };
+        try {
+          const created = await userModel.create(user);
+          const token = generateToken(created._id);
+          res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+          });
+          return res.status(200).json({ reply: "User Created", success: true });
+        } catch (err) {
+          if (err.code === 11000) {
+            console.error("Server error:", err);
+            return res.status(409).json({
+              success: false,
+              message: "User with that username already exists.",
+            });
+          }
+          console.error("Server error:", err);
+          return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+          });
+        }
+      }
     } catch (err) {
-      return res.status(500).json({ reply: "Server Error", success: false, err });
+      return res
+        .status(500)
+        .json({ reply: "Server Error", success: false, err });
     }
+  }
+};
+
+export const verifyUser = async (req, res) => {
+  const data = req.body;
+  if (!data) {
+    return res
+      .status(400)
+      .json({ reply: "Fields Can't Be Empty", success: false });
+  } else if (data.userName == "" || data.password == "") {
+    return res
+      .status(400)
+      .json({ reply: "All Fields Must be Filled", success: false });
+  } else {
+    try {
+      const user = await userModel
+        .findOne({ userName: data.userName })
+        .select("password");
+      if (!user) {
+        return res
+          .status(401)
+          .json({ reply: "User Not Found", success: false });
+      } else {
+        const matched = await bcrypt.compare(data.password, user.password);
+        if (!matched) {
+          return res
+            .status(401)
+            .json({ reply: "Incorrect Password", success: false });
+        } else {
+          const token = generateToken(user._id);
+          ``;
+          res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+          });
+          return res
+            .status(200)
+            .json({ reply: "User Logged In", success: true });
+        }
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ reply: "Server Error", success: false, err });
+    }
+  }
+};
+
+export const logOutUser = (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+
+    return res
+      .status(200)
+      .json({ reply: "User logged out successfully", success: true });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ reply: "Server error", success: false, error: err.message });
   }
 };
