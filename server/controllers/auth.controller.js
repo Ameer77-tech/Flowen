@@ -24,7 +24,7 @@ export const registerUser = async (req, res) => {
       });
       if (exists.length) {
         return res.status(409).json({
-          reply: "User Already Exists",
+          reply: "User with that username already exists.",
           success: false,
           userExistsError: true,
         });
@@ -44,7 +44,9 @@ export const registerUser = async (req, res) => {
             secure: false,
             sameSite: "lax",
           });
-          return res.status(200).json({ reply: "User Created", success: true });
+          return res
+            .status(200)
+            .json({ reply: "SignUp Success", success: true });
         } catch (err) {
           if (err.code === 11000) {
             console.error("Server error:", err);

@@ -5,7 +5,7 @@ import { FaGoogle, FaGithub } from "react-icons/fa6";
 
 export const GoogleButton = () => {
   const googleRedirect = () => {
-    window.location.href = `http://192.168.0.6:3001/api/auth/google`;
+    window.location.href = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/auth/google`;
   };
 
   return (
@@ -22,7 +22,7 @@ export const GoogleButton = () => {
 
 export const GithubButton = () => {
   const githubRedirect = () => {
-    window.location.href = `http://192.168.0.6:3001/api/auth/github`;
+    window.location.href = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/auth/github`;
   };
 
   return (
