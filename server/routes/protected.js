@@ -15,7 +15,7 @@ protectedRouter.get("/dashboard", async (req, res) => {
     res.status(200).json({
       reply: {
         displayName: user.displayName,
-        email: user.email ?? user.userName,
+        email: !user.email == "" || user.userName,
         avatar: user.avatar,
       },
       success: true,

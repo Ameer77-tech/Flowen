@@ -110,7 +110,7 @@ const AppSideBar = () => {
             <div className="flex flex-col leading-7">
               <h3 className="font-semibold">{userData?.displayName}</h3>
               <p className="text-muted-foreground text-xs">
-                {userData?.email}
+                {userData?.email || userData?.userName}
               </p>
             </div>
           </div>

@@ -1,3 +1,4 @@
+"use client";
 import { GithubButton, GoogleButton } from "@/components/AuthBtns";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +10,95 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { GitBranch, Github } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const Form = () => {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    userName: "",
+    displayName: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [pending, setPending] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [responseStatus, setresponseStatus] = useState("");
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.userName.trim()) {
+      newErrors.userName = "Username is required.";
+    } else if (!/^[A-Za-z0-9@._-]+$/.test(formData.userName)) {
+      newErrors.userName =
+        "Username can only include letters, numbers, underscores, dots, hyphens, or @.";
+    } else if (!/[A-Z0-9@._-]/.test(formData.userName)) {
+      newErrors.userName =
+        "Username should include at least one number, one capital or special character like _ or @.";
+    }
+    if (!formData.displayName.trim()) {
+      newErrors.displayName = "Display name is required.";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 6 || formData.password.length > 8) {
+      newErrors.password = "Password must be between 6 and 8 characters.";
+    }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password.";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setPending(true);
+    if (!validate()) return;
+    const url = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/auth/register-user`;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/auth/register-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        }
+      );
+      const response = await res.json();
+      if (!response.success) {
+        setresponseStatus(response.reply);
+        setTimeout(() => {
+          setresponseStatus("");
+        }, 2000);
+      } else {
+        router.push("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+
   return (
     <Card className="w-full border-0 sm:w-3/4 md:w-2/3 lg:w-2/5">
       <CardHeader className={"mb-5"}>
@@ -25,27 +110,67 @@ const Form = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <form className="flex flex-col gap-4">
-          <Input placeholder="Username" className={"lg:text-lg lg:py-2"} />
-          <Input
-            placeholder="Display Name"
-            type="text"
-            className={"lg:text-lg lg:py-2"}
-          />
-          <Input
-            placeholder="Password"
-            type="password"
-            className={"lg:text-lg lg:py-2"}
-          />
-          <Input
-            placeholder="Confirm Password"
-            type="password"
-            className={"lg:text-lg lg:py-2"}
-          />
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div>
+            <Input
+              onChange={handleChange}
+              placeholder="Username"
+              name="userName"
+              value={formData.userName}
+              className={"lg:text-lg lg:py-2"}
+            />
+            {errors.userName && (
+              <p className="text-red-500 text-sm mt-1">{errors.userName}</p>
+            )}
+          </div>
+          <div>
+            <Input
+              onChange={handleChange}
+              name="displayName"
+              placeholder="Display Name"
+              type="text"
+              value={formData.displayName}
+              className={"lg:text-lg lg:py-2"}
+            />
+            {errors.displayName && (
+              <p className="text-red-500 text-sm mt-1">{errors.displayName}</p>
+            )}
+          </div>
+          <div>
+            <Input
+              onChange={handleChange}
+              placeholder="Password"
+              type="password"
+              name="password"
+              value={formData.password}
+              className={"lg:text-lg lg:py-2"}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
+          </div>
+          <div>
+            <Input
+              onChange={handleChange}
+              placeholder="Confirm Password"
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              className={"lg:text-lg lg:py-2"}
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
+          </div>
+
           <Button type="submit" className="w-full">
             Sign Up
           </Button>
+          <p className="text-center text-red-600 text-sm">{responseStatus}</p>
         </form>
+
         <div className="border-accent w-full h-[1px] border relative my-10">
           <span className="text-muted-foreground bg-card absolute left-1/2 -translate-x-1/2 -top-3 w-40 lg:w-50 text-center">
             Or Continue With
@@ -56,6 +181,7 @@ const Form = () => {
           <GoogleButton />
         </div>
       </CardContent>
+
       <CardFooter className="text-center text-sm text-muted-foreground mt-2">
         Already have an account?{" "}
         <Link href={"/login"} className="underline cursor-pointer">

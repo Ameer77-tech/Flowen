@@ -4,6 +4,7 @@ import useUserStore from "../Store/user.store";
 
 const UserInitializer = ({ userData }) => {
   const setData = useUserStore((state) => state.setData);
+
   useEffect(() => {
     setData({
       userName: userData.reply.userName,

@@ -23,9 +23,11 @@ export const registerUser = async (req, res) => {
         provider: "local",
       });
       if (exists.length) {
-        return res
-          .status(409)
-          .json({ reply: "User Already Exists", success: false });
+        return res.status(409).json({
+          reply: "User Already Exists",
+          success: false,
+          userExistsError: true,
+        });
       } else {
         const hashedPassword = await bcrypt.hash(data.password, 10);
         const user = {
@@ -39,7 +41,7 @@ export const registerUser = async (req, res) => {
           const token = generateToken(created._id);
           res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: false,
             sameSite: "lax",
           });
           return res.status(200).json({ reply: "User Created", success: true });

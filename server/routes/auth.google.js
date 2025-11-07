@@ -18,7 +18,7 @@ googleAuthRouter.get(
       secure: false,
       sameSite: "lax",
     });
-    res.redirect("http://localhost:3000/");
+    res.redirect(`${process.env.CLIENT_URL}/`);
   }
 );
 

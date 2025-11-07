@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { Button } from "./ui/button";
-import { GitBranch } from "lucide-react";
+import { FaGoogle, FaGithub } from "react-icons/fa6";
 
 export const GoogleButton = () => {
   const googleRedirect = () => {
-    window.location.href = "http://localhost:3001/api/auth/google";
+    window.location.href = `http://192.168.0.6:3001/api/auth/google`;
   };
 
   return (
@@ -14,7 +14,7 @@ export const GoogleButton = () => {
       variant="outline"
       className="flex-1 flex items-center justify-center gap-2 active:bg-accent/50"
     >
-      <GitBranch />
+      <FaGoogle />
       Google
     </Button>
   );
@@ -22,7 +22,7 @@ export const GoogleButton = () => {
 
 export const GithubButton = () => {
   const githubRedirect = () => {
-    window.location.href = "http://localhost:3001/api/auth/github";
+    window.location.href = `http://192.168.0.6:3001/api/auth/github`;
   };
 
   return (
@@ -31,7 +31,7 @@ export const GithubButton = () => {
       variant="outline"
       className="flex-1 flex items-center justify-center gap-2 active:bg-accent/50"
     >
-      <GitBranch />
+      <FaGithub />
       Github
     </Button>
   );
