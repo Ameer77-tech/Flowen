@@ -1,9 +1,14 @@
-import React from 'react'
+import AppSideBar from "@/components/SideBar";
+import React from "react";
 
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <>
+      <div className="h-screen w-screen flex justify-start">
+        <AppSideBar />
+      </div>
+    </>
+  );
+};
 
-export default page
+export default page;

@@ -12,6 +12,7 @@ import {
   SidebarHeader,
   SidebarFooter,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Bell,
@@ -24,14 +25,61 @@ import {
 import logo from "@/public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
-import profile from "@/public/pro.png";
-import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
 import useUserStore from "@/app/Store/user.store";
+
+const SidebarLogo = () => {
+  const { state } = useSidebar();
+
+  return (
+    <div
+      className={clsx(
+        "flex items-center lg:px-0 lg:py-0 px-3 py-2 gap-3 lg:mt-5"
+      )}
+    >
+      <div className={clsx("shrink-0")}>
+        <Image
+          src={logo}
+          width={40}
+          height={40}
+          alt="logo"
+          className={clsx("rounded-md size-9")}
+        />
+      </div>
+      {state !== "collapsed" && (
+        <p className="text-3xl font-semibold truncate">xTask</p>
+      )}
+    </div>
+  );
+};
+
+const SidebarUser = ({ user }) => {
+  const { state } = useSidebar();
+  return (
+    <div className="flex items-center gap-3 lg:p-0 px-3 py-2">
+      <div className="h-10 w-10 relative shrink-0">
+        <img
+          src={user?.avatar || "/pro.png"}
+          alt="profile"
+          className="w-full h-full rounded-full object-cover "
+        />
+      </div>
+
+      {state !== "collapsed" && (
+        <div className="flex flex-col truncate leading-6">
+          <h3 className="font-semibold truncate">{user?.displayName}</h3>
+          <p className="text-xs text-muted-foreground truncate">
+            {user?.email}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const AppSideBar = () => {
   const userData = useUserStore((state) => state);
-  
   const path = usePathname();
 
   const tabs = [
@@ -45,20 +93,9 @@ const AppSideBar = () => {
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <SidebarHeader>
-          <div className="flex justify-start px-3 gap-3 py-2 items-center lg:h-17 h-15 lg:mt-5">
-            <div className="h-full justify-center items-center flex relative">
-              <Image
-                src={logo}
-                width={501}
-                height={498}
-                alt="logo"
-                className="w-12 h-12"
-              />
-            </div>
-            <p className="text-4xl">xTask</p>
-          </div>
+          <SidebarLogo />
         </SidebarHeader>
 
         <SidebarContent>
@@ -79,13 +116,13 @@ const AppSideBar = () => {
                         className={clsx(
                           "flex items-center gap-2 transition-colors",
                           isActive
-                            ? "text-accent underline font-semibold"
+                            ? "text-primary font-semibold"
                             : "text-secondary-foreground"
                         )}
                       >
                         <Link href={item.link}>
                           <item.icon className="w-5 h-5" />
-                          <span>{item.name}</span>
+                          <span className="truncate">{item.name}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -96,26 +133,13 @@ const AppSideBar = () => {
           </SidebarGroup>
         </SidebarContent>
 
-        <SidebarFooter>
-          <div className="flex justify-start px-3 py-2 gap-2 items-start lg:h-17 h-15 lg:mt-5">
-            <div className="h-full justify-center items-center flex relative">
-              <img
-                src={userData?.avatar || "/pro.png"}
-                alt="profile"
-                className="w-full h-full rounded-full"
-              />
-            </div>
-            <div className="flex flex-col leading-7">
-              <h3 className="font-semibold">{userData?.displayName}</h3>
-              <p className="text-muted-foreground text-xs">
-                {userData?.email}
-              </p>
-            </div>
-          </div>
+        <SidebarFooter className={"px-0 py-5"}>
+          <SidebarUser user={userData} />
         </SidebarFooter>
       </Sidebar>
-
-      <SidebarTrigger />
+      <div className="lg:relative lg:-top-2 fixed top-0 left-0 z-50">
+        <SidebarTrigger />
+      </div>
     </SidebarProvider>
   );
 };
