@@ -49,8 +49,8 @@ const Form = () => {
     }
     if (!formData.password) {
       newErrors.password = "Password is required.";
-    } else if (formData.password.length < 6 || formData.password.length > 8) {
-      newErrors.password = "Password must be between 6 and 8 characters.";
+    } else if (formData.password.length < 6 || formData.password.length > 15) {
+      newErrors.password = "Password must be between 6 and 15 characters.";
     }
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Please confirm your password.";

@@ -160,7 +160,7 @@ const Form = () => {
             </Button>
           </form>
 
-          <div className="border-accent w-full h-[1px] border relative my-10">
+          <div className="border-accent w-full h-px border relative my-10">
             <span className="text-muted-foreground bg-card absolute left-1/2 -translate-x-1/2 -top-3 w-40 lg:w-50 text-center">
               Or Continue With
             </span>

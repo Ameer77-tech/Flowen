@@ -1,6 +1,93 @@
-const About = () => {
-    return (
-        <div>ACCOUNT</div>
-    )
-}
-export default About
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Github, Linkedin } from "lucide-react";
+import Link from "next/link";
+
+const getAppInfo = async () => {
+  return {
+    name: "xTask",
+    version: "1.0.0",
+    description:
+      "xTask is a lightweight, privacy-focused task manager designed for personal productivity. Manage tasks, track priorities, and customize your experience effortlessly.",
+    github: "https://github.com/yourusername/xtask",
+    linkedin: "https://linkedin.com/in/yourprofile",
+  };
+};
+
+const About = async () => {
+  const app = await getAppInfo();
+
+  return (
+    <section className="w-full px-8 py-10 flex justify-center">
+      <Card className="w-full max-w-6xl bg-secondary/40 border border-border/50 shadow-sm">
+        <CardHeader className="text-center pb-4">
+          <CardTitle className="text-3xl font-semibold">About</CardTitle>
+        </CardHeader>
+
+        <CardContent className="px-8 space-y-10">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-semibold text-foreground">
+              {app.name}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Version {app.version}
+            </p>
+            <p className="max-w-2xl mx-auto text-base text-muted-foreground pt-2">
+              {app.description}
+            </p>
+          </div>
+
+          <div className="flex justify-center gap-6 pt-2">
+            <Link
+              href={app.github}
+              target="_blank"
+              className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+            >
+              <Github className="w-5 h-5" />
+              <span className="text-sm font-medium">GitHub</span>
+            </Link>
+            <Link
+              href={app.linkedin}
+              target="_blank"
+              className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+            >
+              <Linkedin className="w-5 h-5" />
+              <span className="text-sm font-medium">LinkedIn</span>
+            </Link>
+          </div>
+
+          <div className="space-y-3 pt-6">
+            <label
+              htmlFor="feedback"
+              className="text-base font-medium text-foreground"
+            >
+              Request a Feature or Report a Bug
+            </label>
+            <Textarea
+              id="feedback"
+              placeholder="Describe your suggestion or issue..."
+              className="min-h-[100px] mt-3 resize-none"
+            />
+            <div className="flex justify-end pt-2">
+              <Button className="px-6 text-base">Send Feedback</Button>
+            </div>
+          </div>
+        </CardContent>
+
+        <CardFooter className="text-center text-sm text-muted-foreground pt-6">
+          © {new Date().getFullYear()} {app.name}. All rights reserved.
+        </CardFooter>
+      </Card>
+    </section>
+  );
+};
+
+export default About;
