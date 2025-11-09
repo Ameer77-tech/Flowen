@@ -1,50 +1,109 @@
+"use client";
 import React from "react";
 import {
   Check,
   Pause,
   PenSquare,
-  PlayCircle,
   PlayIcon,
+  RotateCcw,
   Trash2,
 } from "lucide-react";
 import clsx from "clsx";
 import { TableCell, TableRow } from "@/components/ui/table";
-const Task = ({ name, desc, due, timer, priority }) => {
+import { Badge } from "@/components/ui/badge";
+
+const Task = ({
+  name,
+  desc,
+  due,
+  timer,
+  priority,
+  onPlay,
+  onPause,
+  onRestart,
+  onComplete,
+  onEdit,
+  onDelete,
+}) => {
   return (
-    <TableRow className={"h-20"}>
+    <TableRow className="h-20 hover:bg-muted/50 transition-colors">
       <TableCell>
         <div className="flex flex-col gap-1">
-          <p>{name}</p>
-          <p className="text-muted-foreground">{desc}</p>
+          <p className="font-medium">{name}</p>
+          <p className="text-muted-foreground text-sm">{desc}</p>
         </div>
       </TableCell>
       <TableCell>{due}</TableCell>
       <TableCell>
-        <p
+        <Badge
           className={clsx(
-            "w-15 text-center rounded-xl ",
-            priority == "High"
-              ? "bg-destructive/30 text-destructive"
-              : priority == "Medium"
-              ? "bg-yellow-600/30 text-yellow-500"
-              : "bg-accent/30 text-blue-500"
+            "px-2 py-1 text-center text-xs font-medium w-fit text-black"
           )}
+          variant={
+            priority === "High"
+              ? "destructive"
+              : priority === "Medium"
+              ? "medium"
+              : "default"
+          }
         >
           {priority}
-        </p>
+        </Badge>
       </TableCell>
       <TableCell>
-        <div className="flex items-center gap-2">
-          {timer}
-          <PlayIcon size={25} color="#2f639e" fill="#2f639e" />
-          <Pause />
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold">{timer}</span>
+
+          {false ? (
+            <button
+              onClick={onPause}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              title="Pause timer"
+            >
+              <Pause size={20} />
+            </button>
+          ) : (
+            <button
+              onClick={onPlay}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              title="Start timer"
+            >
+              <PlayIcon size={20} />
+            </button>
+          )}
+
+          <button
+            onClick={onRestart}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            title="Restart timer"
+          >
+            <RotateCcw size={20} />
+          </button>
         </div>
       </TableCell>
-      <TableCell className={""}>
+      <TableCell>
         <div className="flex gap-5">
-          <Check size={20} />
-          <PenSquare size={20} />
-          <Trash2 size={20} color="red" />
+          <button
+            onClick={onComplete}
+            title="Mark as completed"
+            className="hover:text-green-700 transition-colors"
+          >
+            <Check size={20} />
+          </button>
+          <button
+            onClick={onEdit}
+            title="Edit task"
+            className="hover:text-blue-600 transition-colors"
+          >
+            <PenSquare size={20} />
+          </button>
+          <button
+            onClick={onDelete}
+            title="Delete task"
+            className="hover:scale-110 active:scale-95 transition-transform"
+          >
+            <Trash2 size={20} color="red" />
+          </button>
         </div>
       </TableCell>
     </TableRow>

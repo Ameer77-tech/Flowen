@@ -2,77 +2,74 @@ import React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
-import clsx from "clsx";
 import { CalendarDays, CheckCircle, ChevronRight } from "lucide-react";
+import clsx from "clsx";
 import Link from "next/link";
 
 const ProjectCard = ({ project }) => {
+  const progress =
+    project.totalTasks > 0
+      ? Math.round((project.totalDone / project.totalTasks) * 100)
+      : 0;
+
+  const statusColor = clsx(
+    project.status.toLowerCase() === "in progress" && "text-amber-500",
+    project.status.toLowerCase() === "started" && "text-cyan-600",
+    project.status.toLowerCase() === "not started" && "text-gray-500",
+    project.status.toLowerCase() === "planning" && "text-fuchsia-600",
+    project.status.toLowerCase() === "completed" && "text-emerald-600"
+  );
+
   return (
-    <Link href={"/projects/123"} className="w-full">
+    <Link href={`/projects/${project._id || "123"}`} className="w-full">
       <Card
-        className={
-          "border-0 px-5 cursor-pointer hover:scale-105 md:active:scale-95 active:transform-gpu group transition-all ease"
-        }
+        className={clsx(
+          "group relative border border-border/60 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out rounded-2xl hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+        )}
       >
-        <CardHeader className={"md:grid-cols-3 flex md:grid p-0 items-start md:h-20 h-auto"}>
-          <div className="w-full col-span-2">
-            <CardTitle className={"w-full"}>{project.name}</CardTitle>
-            <CardDescription className={"text-xs hidden md:block"}>
+        <CardHeader className="flex px-5 py-2 flex-col md:flex-row justify-between items-start md:items-center gap-2">
+          <div className="flex flex-col">
+            <CardTitle className="text-base md:text-lg font-semibold text-foreground">
+              {project.name}
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground line-clamp-2 hidden md:block">
               {project.description}
             </CardDescription>
           </div>
-          <CardDescription className="md:hidden block group-active:translate-x-3 transition-all ease">
-            <ChevronRight />
-          </CardDescription>
-          <CardDescription
-            className={clsx(
-              "w-full md:flex items-center justify-end hidden",
-              project.status.toLowerCase() == "in progress"
-                ? "text-amber-500"
-                : project.status.toLowerCase() == "started"
-                ? "text-cyan-600"
-                : project.status.toLowerCase() == "not started"
-                ? "text-gray-500"
-                : project.status.toLowerCase() == "planning"
-                ? "text-fuchsia-600"
-                : "text-emerald-600"
-            )}
-          >
-            {project.status}
-          </CardDescription>
-        </CardHeader>
-        <CardContent
-          className={"px-0 md:mt-5 h-full justify-between items-end flex"}
-        >
-          <div className="md:flex items-center gap-2 hidden">
-            <CheckCircle color="green" size={17} />
-            {project.totalDone}/{project.totalTasks}
+
+          <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
+            <CardDescription className={clsx("text-xs font-medium", statusColor)}>
+              {project.status}
+            </CardDescription>
+            <ChevronRight className="md:hidden block text-muted-foreground group-hover:translate-x-1 transition-transform duration-200" />
           </div>
-          <div className="flex items-center gap-2">
-            <CalendarDays color="red" size={12} />
-            <span className="text-muted-foreground text-sm">
-              due {project.dueDate}
+        </CardHeader>
+        <CardContent className="flex items-center justify-between mt-3 text-sm">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <CheckCircle className="text-green-500" size={16} />
+            <span>
+              {project.totalDone}/{project.totalTasks}
             </span>
           </div>
-        </CardContent>
-        <CardFooter className={"md:mt-5 mt-2 p-0 flex-col"}>
-          <div className="flex justify-between w-full">
-            <p className="text-sm text-muted-foreground">Progress</p>
-            <p className="text-sm">
-              {Math.round((project.totalDone / project.totalTasks) * 100)} %
-            </p>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <CalendarDays size={14} className="text-red-500" />
+            <span>due {project.dueDate}</span>
           </div>
-          <div className="w-full bg-background rounded-2xl h-2 md:mt-5 mt-2">
+        </CardContent>
+        <CardFooter className="flex flex-col gap-2 mt-3">
+          <div className="flex justify-between w-full text-xs text-muted-foreground">
+            <span>Progress</span>
+            <span className="font-medium text-foreground">{progress}%</span>
+          </div>
+          <div className="relative w-full bg-muted rounded-full h-2 overflow-hidden">
             <div
-              className="rounded-2xl w-full origin-left h-2 bg-accent"
-              style={{
-                transform: `scaleX(${project.totalDone / project.totalTasks})`,
-              }}
+              className="absolute left-0 w-full top-0 h-full bg-primary transition-transform duration-500 origin-left"
+              style={{ transform: `scaleX(${progress / 100})` }}
             ></div>
           </div>
         </CardFooter>

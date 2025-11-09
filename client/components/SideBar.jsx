@@ -81,7 +81,6 @@ const SidebarUser = ({ user }) => {
 const AppSideBar = () => {
   const userData = useUserStore((state) => state);
   const path = usePathname();
-
   const tabs = [
     { name: "Dashboard", icon: Home, link: "/" },
     { name: "Tasks", icon: NotepadText, link: "/tasks" },
@@ -97,7 +96,6 @@ const AppSideBar = () => {
         <SidebarHeader>
           <SidebarLogo />
         </SidebarHeader>
-
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -133,15 +131,20 @@ const AppSideBar = () => {
           </SidebarGroup>
         </SidebarContent>
 
-        <SidebarFooter className={"px-0 py-5"}>
+        <SidebarFooter
+          className={clsx("py-5", "collapsed" === "collapsed" ? "px-0" : "px-5")}
+        >
           <SidebarUser user={userData} />
         </SidebarFooter>
       </Sidebar>
-      <div className="lg:relative lg:-top-2 fixed top-0 left-0 z-50">
-        <SidebarTrigger />
-      </div>
+      {path !== "/" && (
+        <div className="lg:relative lg:-top-2 fixed top-0 left-0 z-50">
+          <SidebarTrigger />
+        </div>
+      )}
     </SidebarProvider>
   );
+  
 };
 
 export default AppSideBar;

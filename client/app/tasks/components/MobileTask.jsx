@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Card,
@@ -17,66 +18,68 @@ import {
   Trash2,
 } from "lucide-react";
 import clsx from "clsx";
+
 const MobileTask = ({ name, desc, due, status, priority, timer }) => {
-    
+  const isCompleted = status.toLowerCase() === "completed";
+
   return (
     <Card
       className={clsx(
-        "border-1 border-gray-600/50 p-5",
-        status == "Completed" ? "opacity-50 select-none pointer-events-none" : "opacity-100"
+        "border border-gray-700/40 p-4 rounded-xl shadow-sm backdrop-blur-sm transition-all",
+        isCompleted ? "opacity-60 pointer-events-none" : "opacity-100"
       )}
     >
-      <CardHeader className={"p-0 grid-cols-3 items-start"}>
-        <div className="col-span-2">
-          <CardTitle>{name}</CardTitle>
-          <CardDescription className={"text-xs"}>{desc}</CardDescription>
+      <CardHeader className="p-0 flex flex-row justify-between items-start">
+        <div>
+          <CardTitle className="text-base font-semibold">{name}</CardTitle>
+          <CardDescription className="text-xs leading-tight">
+            {desc}
+          </CardDescription>
         </div>
-        <div className="flex gap-2 justify-end w-full">
-          <div className="bg-accent/30 w-10 h-10 rounded-full flex justify-center items-center">
-            <PenIcon size={15} color="cyan" />
-          </div>
-          <div className="bg-accent/30 w-10 h-10 rounded-full flex justify-center items-center">
-            <Check size={15} color="cyan" />
-          </div>
+
+        <div className="flex gap-2">
+          <button className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition">
+            <PenIcon size={14} className="text-blue-400" />
+          </button>
+          <button className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition">
+            <Check size={14} className="text-green-400" />
+          </button>
         </div>
       </CardHeader>
-      <CardContent className={"flex justify-between p-0 pb-5 mt-2 border-b"}>
-        <div className="flex gap-2 text-muted-foreground items-center">
-          <Calendar size={13} />
+      <CardContent className="p-0 mt-3 flex justify-between items-center border-b pb-3">
+        <div className="flex gap-2 text-muted-foreground items-center text-xs">
+          <Calendar size={12} />
           {due}
         </div>
+
         <div
           className={clsx(
-            "text-xs flex justify-center items-center px-3 rounded",
-            status === "Completed"
-              ? "bg-emerald-500/30 text-emerald-500"
+            "text-xs px-2 py-1 rounded-md font-medium capitalize",
+            isCompleted
+              ? "bg-emerald-500/20 text-emerald-500"
               : priority === "High"
-              ? "bg-destructive/30 text-destructive"
+              ? "bg-red-500/20 text-red-500"
               : priority === "Medium"
-              ? "bg-yellow-600/30 text-yellow-500"
-              : "bg-accent/30 text-blue-500"
+              ? "bg-yellow-500/20 text-yellow-500"
+              : "bg-blue-500/20 text-blue-500"
           )}
         >
-          {status.toLowerCase() == "completed"
-            ? "Completed"
-            : priority + " priority"}
+          {isCompleted ? "Completed" : `${priority} priority`}
         </div>
       </CardContent>
-      <CardFooter className="px-0 mt-5 h-full justify-between items-end">
-        <div className="text-lg">{timer}</div>
+      <CardFooter className="p-0 mt-4 flex justify-between items-center">
+        <div className="text-lg font-bold tracking-tight">{timer}</div>
+
         <div className="flex gap-3 items-center">
-          <div className="bg-accent shadow-[0_0_10px_#6366f1aa] w-15 h-15 rounded-full flex justify-center items-center hover:shadow-[0_0_15px_#6366f1] transition">
-            <LucidePlay size={20} color="white" fill="white"/>
-          </div>
-          {/* <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
-            <Pause size={15} color="#3b82f6" />
-          </div> */}
-          <div className="bg-accent/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-accent/50 transition">
-            <RotateCcw size={15} color="#3b82f6" />
-          </div>
-          <div className="bg-destructive/30 w-12 h-12 rounded-full flex justify-center items-center hover:bg-destructive/50 transition">
-            <Trash2 size={15} color="red" />
-          </div>
+          <button className="w-11 h-11 rounded-full bg-accent flex items-center justify-center hover:bg-accent/90 shadow-sm transition">
+            <LucidePlay size={18} className="text-white" />
+          </button>
+          <button className="w-11 h-11 rounded-full bg-accent/20 flex items-center justify-center hover:bg-accent/40 transition">
+            <RotateCcw size={16} className="text-blue-500" />
+          </button>
+          <button className="w-11 h-11 rounded-full bg-red-500/20 flex items-center justify-center hover:bg-red-500/40 transition">
+            <Trash2 size={16} className="text-red-600" />
+          </button>
         </div>
       </CardFooter>
     </Card>
