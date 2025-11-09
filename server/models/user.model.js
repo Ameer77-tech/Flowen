@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
     userName: {
       type: "String",
       unique: () => {
-        return this.provider === "local"
+        return this.provider === "local";
       },
     },
     displayName: {
@@ -37,7 +37,16 @@ const userSchema = new mongoose.Schema(
     },
     createdAt: { type: Date, default: Date.now },
     lastLogin: { type: Date, default: Date.now },
+    tasks: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "tasks",
+    },
+    projects: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "projects",
+    },
   },
+
   { timestamps: true }
 );
 
