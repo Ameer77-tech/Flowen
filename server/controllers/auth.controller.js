@@ -85,7 +85,6 @@ export const verifyUser = async (req, res) => {
       const user = await userModel
         .findOne({ userName: data.userName, provider: "local" })
         .select("password");
-      console.log(user);
 
       if (!user) {
         return res
