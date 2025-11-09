@@ -1,7 +1,8 @@
 import tasksModel from "../models/task.model.js";
 import userModel from "../models/user.model.js";
 
-export const addTask = (req, res) => {
+export const addTask = async (req, res) => {
+  const userId = req.user.id;
   const { title, description, type, dueDate, priority, linkedProject } =
     req.body;
   if (!req.body || Object.keys(req.body).length === 0) {
@@ -47,9 +48,114 @@ export const addTask = (req, res) => {
       success: false,
       reply: "Priority must be 1 (low), 2 (medium), or 3 (high)",
     });
+  } else {
+    const task = {
+      createdBy: userId,
+      title: title,
+      description: description,
+      type: type.toLowerCase(),
+      dueDate: dueDate,
+      priority: priority,
+      linkedProject: type === "project" ? linkedProject : null,
+    };
+    try {
+      await tasksModel.create(task);
+      return res.status(200).json({ reply: "Task Created", success: false });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ reply: "Internal Server Error", success: false, err });
+    }
   }
-  console.log(req.body);
 };
-export const getTasks = (req, res) => {};
-export const deleteTask = (req, res) => {};
-export const editTask = (req, res) => {};
+export const getTasks = async (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({ reply: "Empty Body", success: false });
+  }
+  const userId = req.user.id;
+  const data = req.body;
+  const type = data.type.toLowerCase();
+  if (
+    !type ||
+    (type !== "personal" && type != "project") ||
+    type.trim().length === 0
+  ) {
+    return res.status(400).json({
+      reply: "type of task is not valid",
+      success: false,
+    });
+  } else {
+    try {
+      const tasks = await tasksModel.find({ createdBy: userId, type: type });
+      return res
+        .status(200)
+        .json({ reply: "Fetched Tasks", success: true, tasks });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ reply: "Internal Server Error", success: false, err });
+    }
+  }
+};
+export const editTask = async (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({ reply: "Empty Body", success: false });
+  }
+  const userId = req.user.id;
+  const taskId = req.params.taskid;
+
+  try {
+    const disallowed = ["_id", "createdBy", "linkedProject"];
+    const updatedTerms = {};
+
+    Object.entries(req.body).forEach(([key, value]) => {
+      if (!disallowed.includes(key) && value !== undefined) {
+        updatedTerms[key] = value;
+      }
+    });
+
+    const updatedTask = await tasksModel.findOneAndUpdate(
+      { createdBy: userId, _id: taskId },
+      updatedTerms,
+      { new: true, runValidators: true, strict: "throw" }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({
+        reply: "Task not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      reply: "Task updated successfully",
+      success: true,
+      data: updatedTask,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      reply: "Internal Server Error",
+      success: false,
+      err,
+    });
+  }
+};
+export const deleteTask = async (req, res) => {
+  const userId = req.user.id;
+  const taskId = req.params.taskid;
+  try {
+    const deleted = await tasksModel.findOneAndDelete(
+      { createdBy: userId, _id: taskId },
+      { new: true }
+    );
+    if (!deleted) {
+      return res.status(400).json({ reply: "Task not found", success: false });
+    }
+    return res.status(200).json({ reply: "Task Deleted", success: true });
+  } catch (err) {
+    return res.status(500).json({
+      reply: "Internal Server Error",
+      success: false,
+      err,
+    });
+  }
+};

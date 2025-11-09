@@ -11,9 +11,10 @@ export const decodeToken = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-   return res.status(401).json({ reply: "Unauthorized", success: false });
+    return res.status(401).json({ reply: "Unauthorized", success: false });
   }
   const userId = jwt.verify(token, "SECRET");
   req.user = userId;
+
   next();
 };
