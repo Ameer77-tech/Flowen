@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema({
-  createdBy : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "users"
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
   },
   title: {
     type: String,
@@ -17,6 +17,11 @@ const taskSchema = new mongoose.Schema({
     type: String,
     enum: ["personal", "project"],
     default: "personal",
+  },
+  status: {
+    type: String,
+    enum: ["not-started", "pending", "completed"],
+    default: "not-started",
   },
   linkedProject: {
     type: mongoose.Schema.Types.ObjectId,

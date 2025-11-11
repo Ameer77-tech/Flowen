@@ -3,14 +3,14 @@ import userModel from "../models/user.model.js";
 
 export const addTask = async (req, res) => {
   const userId = req.user.id;
-  const { title, description, type, dueDate, priority, linkedProject } =
-    req.body;
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).json({
       success: false,
       reply: "Empty request body",
     });
   }
+  const { title, description, type, dueDate, priority, linkedProject } =
+    req.body;
   if (!title || title.trim().length === 0) {
     return res.status(400).json({
       success: false,

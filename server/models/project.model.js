@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema({
   createdBy: {
@@ -18,6 +18,16 @@ const projectSchema = new mongoose.Schema({
     default: null,
     required: true,
   },
+  priority: {
+    type: Number,
+    enum: [1, 2, 3],
+    default: 1,
+  },
+  status: {
+    type: String,
+    enum: ["not-started", "pending", "planning", "completed"],
+    default: "not-started",
+  },
   completed: {
     type: Boolean,
     default: false,
@@ -32,6 +42,6 @@ const projectSchema = new mongoose.Schema({
   },
 });
 
-const projectsModel = new mongoose.Model("projects", projectSchema);
+const projectsModel = mongoose.model("projects", projectSchema);
 
 export default projectsModel;

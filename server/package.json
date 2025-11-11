@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "takeOff": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
