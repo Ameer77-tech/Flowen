@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const Header = () => {
   return (
@@ -21,8 +22,8 @@ const Header = () => {
           "md:w-1/2 w-full lg:place-items-start place-items-center gap-0"
         }
       >
-        <CardTitle className={"text-2xl lg:text-4xl text-center"}>Website Redesign</CardTitle>
-        <CardDescription className={"text-center"}>
+        <CardTitle className={"text-2xl lg:text-4xl text-center flex items-end"}>Website Redesign. <span className="text-sm font-normal tracking-tight ml-5">Priority : High</span></CardTitle>
+        <CardDescription className={"text-center"}> 
           Revamp the company website with a modern UI and improved UX flow.
         </CardDescription>
       </CardHeader>
