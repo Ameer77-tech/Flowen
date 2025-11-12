@@ -4,7 +4,7 @@ import ProgressCard from "./Progress";
 
 const Cards = () => {
   return (
-    <div className="p-5 lg:grid-cols-4 gap-5 md:grid-cols-3 grid-cols-2 grid place-items-center">
+    <div className="p-5 lg:grid-cols-4 gap-5 md:grid-cols-3 grid-cols-1 grid place-items-center">
       <DashboardCard
         title={"OVER DUE"}
         count={120}

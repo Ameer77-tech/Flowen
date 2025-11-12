@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./Header";
 import Cards from "./Cards";
 import Charts from "./Charts";
-import Recent from "./Activity";
+import MainContent from "./MainContent";
 
 const Dashboard = () => {
   return (
@@ -10,7 +10,7 @@ const Dashboard = () => {
       <Header />
       <Cards />
       <Charts />
-      <Recent />
+      <MainContent />
     </div>
   );
 };

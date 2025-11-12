@@ -17,7 +17,7 @@ const DashboardCard = ({ title, count, description, trend }) => {
         </CardTitle>
       </CardHeader>
       <CardContent className={"p-0"}>
-        <p className={clsx("font-bold text-center lg:text-5xl px-5", title.toLowerCase() === "due today" ? "text-destructive" : title.toLowerCase() === "over due" ? "text-muted-foreground" : "text-accent")}>{count}</p>
+        <p className={clsx("font-bold text-center text-7xl lg:text-5xl px-5", title.toLowerCase() === "due today" ? "text-destructive" : title.toLowerCase() === "over due" ? "text-muted-foreground" : "text-accent")}>{count}</p>
         <CardDescription className={"pt-3"}>
           {trend == "up" ? (
             <p className="flex items-center text-emerald-500 lg:justify-end md:justify-end justify-center text-xs lg:text-sm lg:px-5">

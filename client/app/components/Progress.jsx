@@ -25,7 +25,7 @@ const ProgressCard = ({ title, completed, total }) => {
       </CardHeader>
       <CardContent className="flex items-center justify-between">
         <div>
-          <div className="lg:text-4xl font-bold">
+          <div className="lg:text-4xl text-4xl font-bold">
             {completed}
             <span className="text-lg text-muted-foreground">/{total}</span>
           </div>
