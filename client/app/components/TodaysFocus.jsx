@@ -1,5 +1,5 @@
 // src/components/TodaysFocus.jsx
-"use client"
+"use client";
 import React, { useState } from "react";
 import {
   Card,
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area"; 
+import { ScrollArea } from "@/components/ui/scroll-area";
 const mockTasks = [
   {
     id: 1,
@@ -69,13 +69,7 @@ const mockTasks = [
   },
 ];
 
-const mockProjects = [
-  "Project Phoenix",
-  "Sales",
-  "Marketing",
-  "Tech",
-  "Admin",
-];
+const mockProjects = ["Project Phoenix", "Sales", "Marketing", "Tech", "Admin"];
 // --- End Mock Data ---
 
 // Helper function to get badge color based on priority
@@ -121,7 +115,7 @@ const TodaysFocus = () => {
             <CardTitle>Today's Focus</CardTitle>
             <CardDescription>Tasks due or overdue</CardDescription>
           </div>
-          
+
           {/* --- Filter Section --- */}
           <div className="flex flex-wrap md:flex-row gap-2 mt-4 md:mt-0">
             {/* Project Filter */}
@@ -166,10 +160,12 @@ const TodaysFocus = () => {
           </div>
         </div>
       </CardHeader>
-      
+
       {/* --- Task List Section --- */}
       <CardContent>
-        <ScrollArea className="h-[400px] pr-4"> {/* Adjust height as needed */}
+        <ScrollArea className="max-h-[900px] overflow-scroll pr-4">
+          {" "}
+          {/* Adjust height as needed */}
           <div className="flex flex-col gap-4">
             {filteredTasks.length > 0 ? (
               filteredTasks.map((task) => (
