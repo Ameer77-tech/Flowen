@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 const Header = () => {
   return (

@@ -1,5 +1,6 @@
 import tasksModel from "../models/task.model.js";
 import userModel from "../models/user.model.js";
+import projectsModel from "../models/project.model.js";
 
 export const addTask = async (req, res) => {
   const userId = req.user.id;
@@ -59,8 +60,28 @@ export const addTask = async (req, res) => {
       linkedProject: type === "project" ? linkedProject : null,
     };
     try {
-      await tasksModel.create(task);
-      return res.status(200).json({ reply: "Task Created", success: false });
+      const created = await tasksModel.create(task);
+      if (task.linkedProject !== null) {
+        const updated = await projectsModel.findOneAndUpdate(
+          { _id: linkedProject, createdBy: userId },
+          {
+            $push: {
+              tasks: created._id,
+            },
+          },
+          { new: true, runValidators: true }
+        );
+        if (!updated || updated.length < 1) {
+          return res
+            .status(400)
+            .json({
+              reply: "Task Was Created But Failed Link The Project",
+              success: false,
+            });
+        }
+      }
+
+      return res.status(200).json({ reply: "Task Created", success: true });
     } catch (err) {
       return res
         .status(500)
