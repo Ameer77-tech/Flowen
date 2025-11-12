@@ -6,18 +6,18 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
+import clsx from "clsx";
 import { ArrowUp, ArrowDown } from "lucide-react";
 const DashboardCard = ({ title, count, description, trend }) => {
   return (
     <Card className={"bg-secondary rounded-2xl border-0"}>
-      <CardHeader className={"p-0 flex justify-between mb-2"}>
-        <CardTitle className={"ml-5"}>{title}</CardTitle>
-        <p className="text-right text-foreground hidden lg:block md:block text-sm hover:text-primary cursor-pointer mr-5">
-          CHECK
-        </p>
+      <CardHeader className={"p-0 flex justify-center mb-2"}>
+        <CardTitle className={"text-sm font-medium text-muted-foreground"}>
+          {title}
+        </CardTitle>
       </CardHeader>
       <CardContent className={"p-0"}>
-        <span className="font-bold text-3xl px-5">{count}</span>  
+        <p className={clsx("font-bold text-center lg:text-5xl px-5", title.toLowerCase() === "due today" ? "text-destructive" : title.toLowerCase() === "over due" ? "text-muted-foreground" : "text-accent")}>{count}</p>
         <CardDescription className={"pt-3"}>
           {trend == "up" ? (
             <p className="flex items-center text-emerald-500 lg:justify-end md:justify-end justify-center text-xs lg:text-sm lg:px-5">

@@ -18,7 +18,6 @@ import {
 } from "recharts";
 
 const Charts = () => {
-  // Pie Chart Data
   const pieData = [
     { name: "Completed", value: 90 },
     { name: "Pending", value: 30 },
@@ -37,7 +36,6 @@ const Charts = () => {
 
   return (
     <div className="p-5 grid lg:grid-cols-2 grid-cols-1 gap-6">
-      {/* Pie Chart */}
       <div className="w-full h-80 rounded-2xl p-4 shadow-lg">
         <h3 className="text-lg font-semibold mb-2">Task Status</h3>
         <ResponsiveContainer width="100%" height="90%">
