@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   Check,
@@ -33,26 +32,26 @@ const Task = ({
           <p className="text-muted-foreground text-sm">{desc}</p>
         </div>
       </TableCell>
-      <TableCell>{due}</TableCell>
+      <TableCell>{new Date(due).toLocaleDateString("en-GB")}</TableCell>
       <TableCell>
         <Badge
           className={clsx(
             "px-2 py-1 text-center text-xs font-medium w-fit text-black"
           )}
           variant={
-            priority === "High"
+            priority === 1
               ? "destructive"
-              : priority === "Medium"
+              : priority === 2
               ? "medium"
               : "default"
           }
         >
-          {priority}
+          {priority === 1 ? "High" : priority === 2 ? "Medium" : "Low"}
         </Badge>
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-3">
-          <span className="text-sm font-semibold">{timer}</span>
+          <span className="text-sm font-semibold">{timer || "00:00:00"}</span>
 
           {false ? (
             <button

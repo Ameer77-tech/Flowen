@@ -11,7 +11,7 @@ import {
 taskRouter.use(decodeToken);
 
 taskRouter.post("/add-task", addTask);
-taskRouter.get("/get-tasks", getTasks);
+taskRouter.post("/get-tasks", getTasks);
 taskRouter.patch("/edit-task/:taskid", editTask);
 taskRouter.delete("/delete-task/:taskid", deleteTask);
 

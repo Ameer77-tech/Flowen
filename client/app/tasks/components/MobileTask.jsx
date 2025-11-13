@@ -20,7 +20,7 @@ import {
 import clsx from "clsx";
 
 const MobileTask = ({ name, desc, due, status, priority, timer }) => {
-  const isCompleted = status.toLowerCase() === "completed";
+  const isCompleted = status.toLowerCase() === "completed" || false;
 
   return (
     <Card
@@ -49,9 +49,8 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
       <CardContent className="p-0 mt-3 flex justify-between items-center border-b pb-3">
         <div className="flex gap-2 text-muted-foreground items-center text-xs">
           <Calendar size={12} />
-          {due}
+          {new Date(due).toLocaleDateString("en-GB")}
         </div>
-
         <div
           className={clsx(
             "text-xs px-2 py-1 rounded-md font-medium capitalize",
@@ -64,11 +63,17 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
               : "bg-blue-500/20 text-blue-500"
           )}
         >
-          {isCompleted ? "Completed" : `${priority} priority`}
+          {isCompleted
+            ? "Completed"
+            : `${
+                priority === 1 ? "High" : priority === 2 ? "Medium" : "Low"
+              } priority`}
         </div>
       </CardContent>
       <CardFooter className="p-0 mt-4 flex justify-between items-center">
-        <div className="text-lg font-bold tracking-tight">{timer}</div>
+        <div className="text-lg font-bold tracking-tight">
+          {timer || "00:00:00"}
+        </div>
 
         <div className="flex gap-3 items-center">
           <button className="w-11 h-11 rounded-full bg-accent flex items-center justify-center hover:bg-accent/90 shadow-sm transition">

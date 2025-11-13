@@ -12,6 +12,7 @@ export const addTask = async (req, res) => {
   }
   const { title, description, type, dueDate, priority, linkedProject } =
     req.body;
+
   if (!title || title.trim().length === 0) {
     return res.status(400).json({
       success: false,
@@ -72,12 +73,10 @@ export const addTask = async (req, res) => {
           { new: true, runValidators: true }
         );
         if (!updated || updated.length < 1) {
-          return res
-            .status(400)
-            .json({
-              reply: "Task Was Created But Failed Link The Project",
-              success: false,
-            });
+          return res.status(400).json({
+            reply: "Task Was Created But Failed Link The Project",
+            success: false,
+          });
         }
       }
 
@@ -93,6 +92,7 @@ export const getTasks = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ reply: "Empty Body", success: false });
   }
+  console.log(req.body);
   const userId = req.user.id;
   const data = req.body;
   const type = data.type.toLowerCase();
