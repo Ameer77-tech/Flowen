@@ -80,7 +80,9 @@ export const addTask = async (req, res) => {
         }
       }
 
-      return res.status(200).json({ reply: "Task Created", success: true });
+      return res
+        .status(200)
+        .json({ reply: "Task Created", success: true, created });
     } catch (err) {
       return res
         .status(500)
@@ -171,7 +173,9 @@ export const deleteTask = async (req, res) => {
     if (!deleted) {
       return res.status(400).json({ reply: "Task not found", success: false });
     }
-    return res.status(200).json({ reply: "Task Deleted", success: true });
+    return res
+      .status(200)
+      .json({ reply: "Task Deleted", success: true, deleted });
   } catch (err) {
     return res.status(500).json({
       reply: "Internal Server Error",

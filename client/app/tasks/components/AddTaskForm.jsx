@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Toast from "@/components/Toast";
+import useTaskStore from "@/app/Store/task.store";
+import { Spinner } from "@/components/ui/spinner";
 
 const initialTaskDetails = {
   title: "",
@@ -26,6 +28,8 @@ const initialTaskDetails = {
 const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks/add-task`;
 
 const AddTaskForm = ({ isOpen, setIsOpen }) => {
+  const addTask = useTaskStore((state) => state.addTask);
+  const [isPending, setisPending] = useState(false);
   const [taskDetails, setTaskDetails] = useState(initialTaskDetails);
   const [toastData, setToastData] = useState({
     message: "",
@@ -47,6 +51,7 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { ...taskDetails, priority: Number(taskDetails.priority) };
+    setisPending(true);
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -68,6 +73,7 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
           setShowToast(false);
         }, 2000);
       } else {
+        addTask(data.created);
         setToastData({
           message: data.reply,
           type: "success",
@@ -86,9 +92,10 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
         type: "error",
         isSuccess: false,
       });
+    } finally {
+      setTaskDetails(initialTaskDetails);
+      setIsOpen(false);
     }
-    setTaskDetails(initialTaskDetails);
-    setIsOpen(false);
   };
 
   const handleChange = (e) => {
@@ -190,9 +197,16 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button type="submit" className="w-full">
-                  Add Task
-                </Button>
+                {isPending ? (
+                  <Button disabled size="sm" className={"w-full"}>
+                    <Spinner className={"size-2"} />
+                    Add Task
+                  </Button>
+                ) : (
+                  <Button type="submit" className="w-full">
+                    Add Task
+                  </Button>
+                )}
               </form>
             </div>
           </motion.div>

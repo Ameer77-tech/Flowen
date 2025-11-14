@@ -29,10 +29,13 @@ const page = async () => {
 
   const data = await res.json();
 
-  if (!data.success) {
+  if (data.reply === "Unauthorized") {
     redirect("/login");
   }
-  
+  if (!data.success) {
+    alert(data.reply);
+    return;
+  }
 
   return (
     <div className="h-screen w-screen flex justify-start">
