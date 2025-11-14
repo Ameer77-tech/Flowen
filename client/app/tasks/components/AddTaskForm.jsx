@@ -92,9 +92,10 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
         type: "error",
         isSuccess: false,
       });
-    } finally {
+    } finally { 
       setTaskDetails(initialTaskDetails);
       setIsOpen(false);
+      setisPending(false);
     }
   };
 

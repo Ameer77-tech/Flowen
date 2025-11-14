@@ -131,28 +131,30 @@ const Tasks = ({ view, filter, tasks }) => {
             </TableRow>
           </TableHeader>
           <TableBody className={"bg-secondary"}>
-            {allTasks.length < 1 ? (
-              <TableRow className="text-muted-foreground bg-background h-50">
-                <TableCell className="col-span-4 text-center" colSpan={5}>
-                  NO TASKS
-                </TableCell>
-              </TableRow>
-            ) : (
-              allTasks.map((task, idx) => (
-                <Task
-                  key={task._id}
-                  id={task._id}
-                  name={task.title}
-                  desc={task.description}
-                  priority={task.priority}
-                  timer={task.timer}
-                  due={task.dueDate}
-                  setActionClicked={setActionClicked}
-                  settaskData={settaskData}
-                  setaction={setaction}
-                />
-              ))
-            )}
+            <AnimatePresence>
+              {allTasks.length < 1 ? (
+                <TableRow className="text-muted-foreground bg-background h-50">
+                  <TableCell className="col-span-4 text-center" colSpan={5}>
+                    NO TASKS
+                  </TableCell>
+                </TableRow>
+              ) : (
+                allTasks.map((task, idx) => (
+                  <Task
+                    key={task._id}
+                    id={task._id}
+                    name={task.title}
+                    desc={task.description}
+                    priority={task.priority}
+                    timer={task.timer}
+                    due={task.dueDate}
+                    setActionClicked={setActionClicked}
+                    settaskData={settaskData}
+                    setaction={setaction}
+                  />
+                ))
+              )}
+            </AnimatePresence>
           </TableBody>
         </Table>
         {/* PC */}
