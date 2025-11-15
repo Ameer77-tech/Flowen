@@ -13,12 +13,12 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 
-const MotionTableRow = motion(TableRow);
-
 const Task = ({
   id,
+  status,
   name,
   desc,
+  filter,
   due,
   timer,
   priority,
@@ -33,20 +33,14 @@ const Task = ({
 }) => {
   const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    // Delay prevents hydration flash
-    const t = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(t);
-  }, []);
-
   return (
-    <MotionTableRow
-      layout
-      initial={false}
-      animate={ready ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.22, ease: "easeOut" }}
-      className="h-20 hover:bg-muted/50 transition-colors"
+    <TableRow
+      className={clsx(
+        "h-20",
+        status === "completed" &&
+          filter !== "completed" &&
+          "opacity-30 trasnsition-all ease duration-300 pointer-events-none"
+      )}
     >
       <TableCell>
         <div className="flex flex-col gap-1">
@@ -77,16 +71,25 @@ const Task = ({
           <span className="text-sm font-semibold">{timer || "00:00:00"}</span>
 
           {false ? (
-            <button onClick={onPause}>
+            <button
+              onClick={onPause}
+              className="hover:text-white text-muted-foreground transition-all ease"
+            >
               <Pause size={20} />
             </button>
           ) : (
-            <button onClick={onPlay}>
+            <button
+              onClick={onPlay}
+              className="hover:text-white text-muted-foreground transition-all ease"
+            >
               <PlayIcon size={20} />
             </button>
           )}
 
-          <button onClick={onRestart}>
+          <button
+            onClick={onRestart}
+            className="hover:text-white text-muted-foreground transition-all ease"
+          >
             <RotateCcw size={20} />
           </button>
         </div>
@@ -95,6 +98,7 @@ const Task = ({
       <TableCell>
         <div className="flex gap-5">
           <button
+            className="hover:text-primary transition-all ease"
             onClick={() => {
               setActionClicked(true);
               setaction("mark");
@@ -104,6 +108,7 @@ const Task = ({
             <Check size={20} />
           </button>
           <button
+            className="hover:text-accent transition-all ease"
             onClick={() => {
               setActionClicked(true);
               setaction("edit");
@@ -113,6 +118,7 @@ const Task = ({
             <PenSquare size={20} />
           </button>
           <button
+            className="hover:scale-110 transition-all ease"
             onClick={() => {
               setActionClicked(true);
               setaction("delete");
@@ -123,7 +129,7 @@ const Task = ({
           </button>
         </div>
       </TableCell>
-    </MotionTableRow>
+    </TableRow>
   );
 };
 

@@ -1,14 +1,22 @@
 "use client";
-import React, { useEffect } from "react";
-import useUserStore from "../Store/user.store";
+import { useEffect } from "react";
 import useTaskStore from "../Store/task.store";
 
 const TasksInitializer = ({ taskData }) => {
-  const setData = useTaskStore((state) => state.setTasks);
-  
+  const setTasks = useTaskStore((state) => state.setTasks);
+  const setLoading = useTaskStore((state) => state.setLoading);
+
   useEffect(() => {
-    setData(taskData);
-  }, []);
+    if (!taskData) return;
+
+    try {
+      localStorage.removeItem("task-store");
+      localStorage.removeItem("persist:task-store");
+    } catch (e) {}
+
+    setTasks({ tasks: taskData });
+    setLoading(false);
+  }, [taskData, setTasks]);
 
   return null;
 };

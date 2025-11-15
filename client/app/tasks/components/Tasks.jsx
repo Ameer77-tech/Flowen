@@ -16,10 +16,28 @@ import useTaskStore from "@/app/Store/task.store";
 import ShowDialog from "./Dialog";
 import { AnimatePresence } from "motion/react";
 import Toast from "@/components/Toast";
+import Loading from "@/components/Loading";
+import { Spinner } from "@/components/ui/spinner";
 
-const Tasks = ({ view, filter, tasks }) => {
-  const allTasks = useTaskStore((state) => state.tasks);
+const Tasks = ({ view, filter }) => {
+  const tasks = useTaskStore((state) => state.tasks);
+  const isLoading = useTaskStore((state) => state.isLoading);
+  const allTasks = React.useMemo(() => {
+    return [...(tasks || [])].sort((a, b) => {
+      if (a.status === "completed" && b.status !== "completed") return 1;
+      if (a.status !== "completed" && b.status === "completed") return -1;
+
+      const pa = Number(a.priority ?? 99);
+      const pb = Number(b.priority ?? 99);
+      if (pa !== pb) return pa - pb;
+
+      const da = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
+      const db = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+      return da - db;
+    });
+  }, [tasks]);
   const removeTask = useTaskStore((state) => state.removeTask);
+  const editTask = useTaskStore((state) => state.updateTask);
   const [toastData, settoastData] = useState({
     show: false,
     message: "",
@@ -33,11 +51,11 @@ const Tasks = ({ view, filter, tasks }) => {
     text: "",
     id: "",
   });
-  const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks/delete-task`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks`;
   const onDelete = async () => {
     setisPending(true);
     try {
-      const response = await fetch(`${apiUrl}/${taskData.id}`, {
+      const response = await fetch(`${apiUrl}/delete-task/${taskData.id}`, {
         method: "DELETE",
         header: {
           "content-type": "application/json",
@@ -89,7 +107,56 @@ const Tasks = ({ view, filter, tasks }) => {
   };
   const onEdit = async () => {};
   const onMark = async () => {
-    console.log("INMARK");
+    setisPending(true);
+    try {
+      const response = await fetch(`${apiUrl}/edit-task/${taskData.id}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ status: "completed" }),
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (!data.success) {
+        settoastData({
+          show: true,
+          message: data.reply,
+          type: "error",
+        });
+        setTimeout(() => {
+          settoastData({
+            show: false,
+            message: "",
+            type: "",
+          });
+        }, 2000);
+      } else {
+        settoastData({
+          show: true,
+          message: data.reply,
+          type: "success",
+        });
+        editTask(data.updatedTask._id, { status: "completed" });
+        setTimeout(() => {
+          settoastData({
+            show: false,
+            message: "",
+            type: "",
+          });
+        }, 2000);
+        setActionClicked(false);
+      }
+    } catch (err) {
+      settoastData({
+        show: true,
+        message: "An Error occured",
+        type: "error",
+      });
+    } finally {
+      setisPending(false);
+      setActionClicked(false);
+    }
   };
 
   return (
@@ -132,15 +199,26 @@ const Tasks = ({ view, filter, tasks }) => {
           </TableHeader>
           <TableBody className={"bg-secondary"}>
             <AnimatePresence>
-              {allTasks.length < 1 ? (
+              {isLoading ? (
+                <TableRow>
+                  <TableCell
+                    className={"flex justify-center items-center"}
+                    colSpan={5}
+                  >
+                    <Spinner className={"size-5"} />
+                  </TableCell>
+                </TableRow>
+              ) : allTasks.length < 1 ? (
                 <TableRow className="text-muted-foreground bg-background h-50">
-                  <TableCell className="col-span-4 text-center" colSpan={5}>
+                  <TableCell className="text-center" colSpan={5}>
                     NO TASKS
                   </TableCell>
                 </TableRow>
               ) : (
                 allTasks.map((task, idx) => (
                   <Task
+                    filter={filter}
+                    status={task.status}
                     key={task._id}
                     id={task._id}
                     name={task.title}
@@ -165,19 +243,24 @@ const Tasks = ({ view, filter, tasks }) => {
             view == "grid" ? "md:grid md:grid-cols-3" : "md:hidden"
           )}
         >
-          {allTasks.map((task, idx) => (
-            <MobileTask
-              key={task._id}
-              name={task?.title}
-              desc={task?.description}
-              due={task?.dueDate}
-              status={task?.status}
-              priority={task?.priority}
-              timer={task?.timer}
-              setActionClicked={setActionClicked}
-              settaskData={settaskData}
-            />
-          ))}
+          {allTasks.length < 1 ? (
+            <p className="text-center text-muted-foreground">NO TASKS</p>
+          ) : (
+            allTasks.map((task, idx) => (
+              <MobileTask
+                key={task._id}
+                id={task._id}
+                name={task.title}
+                desc={task.description}
+                priority={task.priority}
+                timer={task.timer}
+                due={task.dueDate}
+                setActionClicked={setActionClicked}
+                settaskData={settaskData}
+                setaction={setaction}
+              />
+            ))
+          )}
         </div>
       </div>
     </>

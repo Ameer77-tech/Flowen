@@ -5,7 +5,7 @@ import Link from "next/link";
 import AddTaskBtn from "./AddTaskBtn";
 
 export default function Filter({ filter, currentView }) {
-  const filters = ["All", "Completed", "Pending", "In-progress"];
+  const filters = ["All", "Completed", "In-progress"];
 
   return (
     <div className="md:flex md:flex-row flex-col md:justify-between px-3 md:mt-0 mt-5">
@@ -29,7 +29,9 @@ export default function Filter({ filter, currentView }) {
               href={`/tasks?${params.toString()}`}
               className={clsx(
                 "select-none shadow-sm md:w-auto w-full shadow-muted-foreground/20 rounded-2xl px-3 py-2 cursor-pointer",
-                filter === name.toLowerCase() ? "bg-accent" : "bg-secondary"
+                filter === name.toLowerCase()
+                  ? "bg-accent text-black"
+                  : "bg-secondary"
               )}
             >
               {name}

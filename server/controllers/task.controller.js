@@ -94,33 +94,38 @@ export const getTasks = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ reply: "Empty Body", success: false });
   }
-  console.log(req.body);
+
   const userId = req.user.id;
   const data = req.body;
-  const type = data.type.toLowerCase();
-  if (
-    !type ||
-    (type !== "personal" && type != "project") ||
-    type.trim().length === 0
-  ) {
+  const type = String(data.type || "").toLowerCase();
+  const filter = String(data.filter || "").toLowerCase();
+
+  if (!["personal", "project"].includes(type)) {
     return res.status(400).json({
       reply: "type of task is not valid",
       success: false,
     });
-  } else {
-    try {
-      const tasks = await tasksModel.find({ createdBy: userId, type: type });
-      return res
-        .status(200)
-        .json({ reply: "Fetched Tasks", success: true, tasks });
-    } catch (err) {
-      return res
-        .status(500)
-        .json({ reply: "Internal Server Error", success: false, err });
+  }
+
+  try {
+    const query = { createdBy: userId, type };
+
+    if (filter === "completed" || filter === "in-progress") {
+      query.status = filter;
     }
+
+    const tasks = await tasksModel.find(query);
+    return res
+      .status(200)
+      .json({ reply: "Fetched Tasks", success: true, tasks });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ reply: "Internal Server Error", success: false, err });
   }
 };
 export const editTask = async (req, res) => {
+  console.log(req.body);
   if (!req.body) {
     return res.status(400).json({ reply: "Empty Body", success: false });
   }
@@ -152,7 +157,7 @@ export const editTask = async (req, res) => {
     return res.status(200).json({
       reply: "Task updated successfully",
       success: true,
-      data: updatedTask,
+      updatedTask,
     });
   } catch (err) {
     return res.status(500).json({

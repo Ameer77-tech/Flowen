@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import UserInitaializer from "./initializers/user.initializer";
+import Loading from "@/components/Loading";
 const page = async () => {
   const cookieStore = await cookies();
 

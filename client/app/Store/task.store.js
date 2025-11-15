@@ -3,6 +3,8 @@ import { create } from "zustand";
 
 const useTaskStore = create((set) => ({
   tasks: [],
+  isLoading: true,
+  setLoading: (val) => set((state) => ({ isLoading: val })),
   addTask: (task) =>
     set((state) => ({
       tasks: [...state.tasks, task],
@@ -19,7 +21,7 @@ const useTaskStore = create((set) => ({
         task._id === taskId ? { ...task, ...updatedTask } : task
       ),
     })),
-  setTasks: (tasks) => set({ tasks }),
+  setTasks: (Tasks) => set({ tasks: Tasks.tasks }),
   clearTasks: () => set({ tasks: [] }),
 }));
 

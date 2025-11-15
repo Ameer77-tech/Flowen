@@ -19,7 +19,22 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 
-const MobileTask = ({ name, desc, due, status, priority, timer }) => {
+const MobileTask = ({
+  id,
+  name,
+  desc,
+  due,
+  timer,
+  priority,
+  onPlay,
+  onPause,
+  onRestart,
+  onComplete,
+  onEdit,
+  setActionClicked,
+  setaction,
+  settaskData,
+}) => {
   const isCompleted = status.toLowerCase() === "completed" || false;
 
   return (
@@ -38,10 +53,24 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
         </div>
 
         <div className="flex gap-2">
-          <button className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition">
+          <button
+            onClick={() => {
+              setActionClicked(true);
+              setaction("mark");
+              settaskData({ text: name, id });
+            }}
+            className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition"
+          >
             <PenIcon size={14} className="text-blue-400" />
           </button>
-          <button className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition">
+          <button
+            onClick={() => {
+              setActionClicked(true);
+              setaction("edit");
+              settaskData({ text: name, id });
+            }}
+            className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition"
+          >
             <Check size={14} className="text-green-400" />
           </button>
         </div>
@@ -82,7 +111,14 @@ const MobileTask = ({ name, desc, due, status, priority, timer }) => {
           <button className="w-11 h-11 rounded-full bg-accent/20 flex items-center justify-center hover:bg-accent/40 transition">
             <RotateCcw size={16} className="text-blue-500" />
           </button>
-          <button className="w-11 h-11 rounded-full bg-red-500/20 flex items-center justify-center hover:bg-red-500/40 transition">
+          <button
+            onClick={() => {
+              setActionClicked(true);
+              setaction("delete");
+              settaskData({ text: name, id });
+            }}
+            className="w-11 h-11 rounded-full bg-red-500/20 flex items-center justify-center hover:bg-red-500/40 transition"
+          >
             <Trash2 size={16} className="text-red-600" />
           </button>
         </div>

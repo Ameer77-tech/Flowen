@@ -1,12 +1,9 @@
+import Loading from "@/components/Loading";
 import { Spinner } from "@/components/ui/spinner";
 import React from "react";
 
 const loading = () => {
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      <Spinner />
-    </div>
-  );
+  return <Loading />;
 };
 
 export default loading;

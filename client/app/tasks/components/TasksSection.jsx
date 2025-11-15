@@ -22,7 +22,7 @@ export default async function TasksSection({ filter, view }) {
         "content-type": "application/json",
         Cookie: cookieHeader,
       },
-      body: JSON.stringify({ type: "personal" }),
+      body: JSON.stringify({ type: "personal", filter }),
       cache: "no-store",
     }
   );
