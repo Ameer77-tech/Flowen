@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Task from "./Task";
 import {
   Table,
@@ -18,9 +18,11 @@ import { AnimatePresence } from "motion/react";
 import Toast from "@/components/Toast";
 import Loading from "@/components/Loading";
 import { Spinner } from "@/components/ui/spinner";
+import AddTaskForm from "./AddTaskForm";
 
 const Tasks = ({ view, filter }) => {
   const tasks = useTaskStore((state) => state.tasks);
+
   const isLoading = useTaskStore((state) => state.isLoading);
   const allTasks = React.useMemo(() => {
     return [...(tasks || [])].sort((a, b) => {
@@ -36,6 +38,7 @@ const Tasks = ({ view, filter }) => {
       return da - db;
     });
   }, [tasks]);
+
   const removeTask = useTaskStore((state) => state.removeTask);
   const editTask = useTaskStore((state) => state.updateTask);
   const [toastData, settoastData] = useState({
@@ -43,6 +46,8 @@ const Tasks = ({ view, filter }) => {
     message: "",
     type: "",
   });
+  const [initialDetails, setInitialDetails] = useState({});
+  const [editingForm, setEditingForm] = useState(false);
   const [actionClicked, setActionClicked] = useState(false);
   const [isPending, setisPending] = useState(false);
   const [action, setaction] = useState("");
@@ -51,6 +56,14 @@ const Tasks = ({ view, filter }) => {
     text: "",
     id: "",
   });
+  useEffect(() => {
+    tasks.forEach((task, idx) => {
+      if (task._id === editingTask) {
+        setInitialDetails(task);
+      }
+    });
+  }, [editingTask]);
+
   const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks`;
   const onDelete = async () => {
     setisPending(true);
@@ -158,10 +171,17 @@ const Tasks = ({ view, filter }) => {
       setActionClicked(false);
     }
   };
+  console.log(initialDetails);
 
   return (
     <>
       <Toast toastData={toastData} show={toastData.show} />
+      <AddTaskForm
+        initialTaskDetails={initialDetails}
+        isOpen={editingForm}
+        editingTask={editingTask}
+        setIsOpen={setEditingForm}
+      />
       <AnimatePresence>
         {actionClicked && (
           <ShowDialog
@@ -173,6 +193,7 @@ const Tasks = ({ view, filter }) => {
             onMark={onMark}
             isPending={isPending}
             seteditingTask={seteditingTask}
+            setEditingForm={setEditingForm}
           />
         )}
       </AnimatePresence>

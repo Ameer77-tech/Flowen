@@ -13,6 +13,7 @@ const ShowDialog = ({
   seteditingTask,
   onMark,
   isPending,
+  setEditingForm
 }) => {
   useEffect(() => {
     const handler = (e) => e.key === "Escape" && setActionClicked(false);
@@ -100,7 +101,7 @@ const ShowDialog = ({
                   action === "delete"
                     ? onDelete()
                     : action === "edit"
-                    ? seteditingTask(taskData.id)
+                    ? (seteditingTask(taskData.id), setEditingForm(true))
                     : onMark();
                 }}
                 className="w-1/2 rounded-lg"

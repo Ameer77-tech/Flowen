@@ -16,21 +16,33 @@ import Toast from "@/components/Toast";
 import useTaskStore from "@/app/Store/task.store";
 import { Spinner } from "@/components/ui/spinner";
 
-const initialTaskDetails = {
-  title: "",
-  description: "",
-  dueDate: "",
-  priority: 2,
-  type: "personal",
-  linkedProject: null,
-};
-
 const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks/add-task`;
 
-const AddTaskForm = ({ isOpen, setIsOpen }) => {
+const AddTaskForm = ({
+  isOpen,
+  setIsOpen,
+  initialTaskDetails,
+  editingTask,
+}) => {
+
+
   const addTask = useTaskStore((state) => state.addTask);
   const [isPending, setisPending] = useState(false);
-  const [taskDetails, setTaskDetails] = useState(initialTaskDetails);
+  const [taskDetails, setTaskDetails] = useState({});
+  useEffect(() => {
+    setTaskDetails(
+      initialTaskDetails || {
+        title: "",
+        description: "",
+        dueDate: "",
+        priority: 1,
+        type: "personal",
+        linkedProject: null,
+      }
+    );
+
+  }, [initialTaskDetails]);
+
   const [toastData, setToastData] = useState({
     message: "",
     type: "",
@@ -92,7 +104,7 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
         type: "error",
         isSuccess: false,
       });
-    } finally { 
+    } finally {
       setTaskDetails(initialTaskDetails);
       setIsOpen(false);
       setisPending(false);
@@ -141,7 +153,11 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
                 ✕
               </button>
               <h2 className="text-2xl font-bold mb-2 text-center">
-                🚀 Create New Task
+                {editingTask === undefined ? (
+                  <p>🚀 Create New Task </p>
+                ) : (
+                  <p>Edit Task</p>
+                )}
               </h2>
               <p className="text-center text-gray-500 mb-6">
                 Enter the details for your new task below.
@@ -186,7 +202,7 @@ const AddTaskForm = ({ isOpen, setIsOpen }) => {
                   <Label htmlFor="priority">Priority</Label>
                   <Select
                     value={String(taskDetails.priority)}
-                    onValueChange={handlePriorityChange}
+                    onValueChange={(value) => handlePriorityChange(value)}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select priority" />
