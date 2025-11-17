@@ -101,8 +101,7 @@ const Task = ({
           <button
             className={clsx(
               "hover:text-primary transition-all ease",
-              filter === "completed" &&
-                "pointer-events-none text-muted-foreground text-primary"
+              filter === "completed" && "pointer-events-none text-primary"
             )}
             onClick={() => {
               setActionClicked(true);

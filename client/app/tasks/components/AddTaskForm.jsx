@@ -72,7 +72,6 @@ const AddTaskForm = ({
     isSuccess: false,
   });
   const [showToast, setShowToast] = useState(false);
-  console.log(taskDetails.priority);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
