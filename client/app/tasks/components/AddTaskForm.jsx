@@ -17,6 +17,15 @@ import useTaskStore from "@/app/Store/task.store";
 import { Spinner } from "@/components/ui/spinner";
 
 const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks/add-task`;
+const formatDateForInput = (dateString) => {
+  if (!dateString) return "";
+  try {
+    return dateString.substring(0, 10);
+  } catch (e) {
+    console.error("Failed to format date:", e);
+    return "";
+  }
+};
 
 const AddTaskForm = ({
   isOpen,
@@ -24,23 +33,35 @@ const AddTaskForm = ({
   initialTaskDetails,
   editingTask,
 }) => {
-
-
+  const defaultTaskState = {
+    title: "",
+    description: "",
+    dueDate: "",
+    priority: 2,
+    type: "personal",
+    linkedProject: null,
+  };
   const addTask = useTaskStore((state) => state.addTask);
   const [isPending, setisPending] = useState(false);
-  const [taskDetails, setTaskDetails] = useState({});
-  useEffect(() => {
-    setTaskDetails(
-      initialTaskDetails || {
-        title: "",
-        description: "",
-        dueDate: "",
-        priority: 1,
-        type: "personal",
-        linkedProject: null,
-      }
-    );
 
+  const buildFormState = (initialData) => {
+    if (initialData) {
+      return {
+        ...defaultTaskState,
+        ...initialData,
+
+        priority: Number(initialData.priority) || defaultTaskState.priority,
+        dueDate: formatDateForInput(initialData.dueDate),
+      };
+    }
+    return defaultTaskState;
+  };
+  const [taskDetails, setTaskDetails] = useState(() =>
+    buildFormState(initialTaskDetails)
+  );
+
+  useEffect(() => {
+    setTaskDetails(buildFormState(initialTaskDetails));
   }, [initialTaskDetails]);
 
   const [toastData, setToastData] = useState({
@@ -49,6 +70,7 @@ const AddTaskForm = ({
     isSuccess: false,
   });
   const [showToast, setShowToast] = useState(false);
+  console.log(taskDetails.priority);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -202,7 +224,7 @@ const AddTaskForm = ({
                   <Label htmlFor="priority">Priority</Label>
                   <Select
                     value={String(taskDetails.priority)}
-                    onValueChange={(value) => handlePriorityChange(value)}
+                    onChange={(value) => handlePriorityChange(value)}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select priority" />

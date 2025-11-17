@@ -171,6 +171,8 @@ const Tasks = ({ view, filter }) => {
       setActionClicked(false);
     }
   };
+  console.log("IN TASKS");
+
   console.log(initialDetails);
 
   return (

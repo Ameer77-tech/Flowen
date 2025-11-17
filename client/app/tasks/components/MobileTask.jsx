@@ -56,7 +56,7 @@ const MobileTask = ({
           <button
             onClick={() => {
               setActionClicked(true);
-              setaction("mark");
+              setaction("edit");
               settaskData({ text: name, id });
             }}
             className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition"
@@ -66,7 +66,7 @@ const MobileTask = ({
           <button
             onClick={() => {
               setActionClicked(true);
-              setaction("edit");
+              setaction("mark");
               settaskData({ text: name, id });
             }}
             className="w-9 h-9 rounded-full bg-accent/30 flex items-center justify-center hover:bg-accent/40 transition"
