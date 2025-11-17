@@ -10,6 +10,7 @@ import {
   PlayIcon,
   RotateCcw,
   Trash2,
+  CheckCheck,
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -98,17 +99,29 @@ const Task = ({
       <TableCell>
         <div className="flex gap-5">
           <button
-            className="hover:text-primary transition-all ease"
+            className={clsx(
+              "hover:text-primary transition-all ease",
+              filter === "completed" &&
+                "pointer-events-none text-muted-foreground text-primary"
+            )}
             onClick={() => {
               setActionClicked(true);
               setaction("mark");
               settaskData({ text: name, id });
             }}
           >
-            <Check size={20} />
+            {filter === "completed" ? (
+              <CheckCheck size={20} />
+            ) : (
+              <Check size={20} />
+            )}
           </button>
           <button
-            className="hover:text-accent transition-all ease"
+            className={clsx(
+              "hover:text-accent transition-all ease",
+              filter === "completed" &&
+                "pointer-events-none text-muted-foreground opacity-25"
+            )}
             onClick={() => {
               setActionClicked(true);
               setaction("edit");
