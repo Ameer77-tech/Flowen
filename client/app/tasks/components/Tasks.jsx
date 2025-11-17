@@ -179,6 +179,7 @@ const Tasks = ({ view, filter }) => {
     <>
       <Toast toastData={toastData} show={toastData.show} />
       <AddTaskForm
+        setActionClicked={setActionClicked}
         initialTaskDetails={initialDetails}
         isOpen={editingForm}
         editingTask={editingTask}

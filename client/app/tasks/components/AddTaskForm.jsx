@@ -16,7 +16,7 @@ import Toast from "@/components/Toast";
 import useTaskStore from "@/app/Store/task.store";
 import { Spinner } from "@/components/ui/spinner";
 
-const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks/add-task`;
+const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks`;
 const formatDateForInput = (dateString) => {
   if (!dateString) return "";
   try {
@@ -32,6 +32,7 @@ const AddTaskForm = ({
   setIsOpen,
   initialTaskDetails,
   editingTask,
+  setActionClicked,
 }) => {
   const defaultTaskState = {
     title: "",
@@ -42,6 +43,7 @@ const AddTaskForm = ({
     linkedProject: null,
   };
   const addTask = useTaskStore((state) => state.addTask);
+  const updateTask = useTaskStore((state) => state.updateTask);
   const [isPending, setisPending] = useState(false);
 
   const buildFormState = (initialData) => {
@@ -87,7 +89,7 @@ const AddTaskForm = ({
     const payload = { ...taskDetails, priority: Number(taskDetails.priority) };
     setisPending(true);
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${apiUrl}/add-task`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
@@ -133,13 +135,70 @@ const AddTaskForm = ({
     }
   };
 
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    const payload = { ...taskDetails, priority: Number(taskDetails.priority) };
+    setisPending(true);
+    try {
+      const response = await fetch(`${apiUrl}/edit-task/${editingTask}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if (!data.success) {
+        setToastData({
+          message: data.reply,
+          type: "error",
+          isSuccess: false,
+        });
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 2000);
+      } else {
+        updateTask(data.updatedTask._id, data.updatedTask);
+        setToastData({
+          message: data.reply,
+          type: "success",
+          isSuccess: true,
+        });
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 2000);
+      }
+    } catch (err) {
+      console.log(err);
+      setShowToast(true);
+      setToastData({
+        message: err,
+        type: "error",
+        isSuccess: false,
+      });
+    } finally {
+      setTaskDetails(initialTaskDetails);
+      setIsOpen(false);
+      setisPending(false);
+      setActionClicked(false);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTaskDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePriorityChange = (value) => {
-    setTaskDetails((prev) => ({ ...prev, priority: Number(value) }));
+    if (value === "") {
+      setTaskDetails((prev) => ({
+        ...prev,
+        priority: Number(taskDetails.priority),
+      }));
+    } else setTaskDetails((prev) => ({ ...prev, priority: Number(value) }));
   };
 
   return (
@@ -182,9 +241,16 @@ const AddTaskForm = ({
                 )}
               </h2>
               <p className="text-center text-gray-500 mb-6">
-                Enter the details for your new task below.
+                {editingTask === undefined ? (
+                  <span>Enter the details for your new task below.</span>
+                ) : (
+                  <span> Edit the Details of Your Tasks </span>
+                )}
               </p>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form
+                onSubmit={editingTask === undefined ? handleSubmit : handleEdit}
+                className="space-y-4"
+              >
                 <div className="space-y-2">
                   <Label htmlFor="title">Task Title</Label>
                   <Input
@@ -224,7 +290,7 @@ const AddTaskForm = ({
                   <Label htmlFor="priority">Priority</Label>
                   <Select
                     value={String(taskDetails.priority)}
-                    onChange={(value) => handlePriorityChange(value)}
+                    onValueChange={(value) => handlePriorityChange(value)}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select priority" />
@@ -243,7 +309,11 @@ const AddTaskForm = ({
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full">
-                    Add Task
+                    {editingTask === undefined ? (
+                      <p>Add Task</p>
+                    ) : (
+                      <p>Edit Task</p>
+                    )}
                   </Button>
                 )}
               </form>
