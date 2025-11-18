@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,7 @@ import {
   CheckCheck,
 } from "lucide-react";
 import clsx from "clsx";
+import useTaskStore from "@/app/Store/task.store";
 
 const Task = ({
   id,
@@ -23,16 +24,76 @@ const Task = ({
   due,
   timer,
   priority,
-  onPlay,
-  onPause,
-  onRestart,
-  onComplete,
-  onEdit,
   setActionClicked,
   setaction,
   settaskData,
+  setTimerSeconds,
+  timerSeconds,
 }) => {
+  const updateTask = useTaskStore((state) => state.updateTask);
   const [ready, setReady] = useState(false);
+  const intervalRef = useRef(null);
+  useEffect(() => {
+    setTimerSeconds(timer);
+  }, [timer]);
+
+  useEffect(() => {
+    return () => {
+      saveTimerToDB();
+    };
+  }, []);
+
+  const saveTimerToDB = async () => {
+    await updateTimer({ timer: timerSeconds });
+  };
+
+  const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks`;
+
+  const updateTimer = async (data) => {
+    const payload = { timer: data.timer };
+    try {
+      const response = await fetch(`${apiUrl}/edit-task/${id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        console.log(data);
+      } else {
+        updateTask(id, data.updatedTask);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onPlay = () => {
+    setReady(true);
+    intervalRef.current = setInterval(() => {
+      setTimerSeconds((prev) => prev + 1);
+    }, 1000);
+  };
+  const onPause = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+    setReady(false);
+    console.log("HERERE");
+    updateTimer({ timer: timerSeconds });
+  };
+  const onReset = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+    setTimerSeconds(0);
+    setReady(false);
+  };
+  const formatTime = (seconds) => {
+    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
+    return `${h}:${m}:${s}`;
+  };
 
   return (
     <TableRow
@@ -69,9 +130,11 @@ const Task = ({
 
       <TableCell>
         <div className="flex items-center gap-3">
-          <span className="text-sm font-semibold">{timer || "00:00:00"}</span>
+          <span className="text-sm font-semibold">
+            {timerSeconds === 0 ? "00:00:00" : formatTime(timerSeconds)}
+          </span>
 
-          {false ? (
+          {ready ? (
             <button
               onClick={onPause}
               className="hover:text-white text-muted-foreground transition-all ease"
@@ -88,7 +151,7 @@ const Task = ({
           )}
 
           <button
-            onClick={onRestart}
+            onClick={onReset}
             className="hover:text-white text-muted-foreground transition-all ease"
           >
             <RotateCcw size={20} />

@@ -22,7 +22,7 @@ import AddTaskForm from "./AddTaskForm";
 
 const Tasks = ({ view, filter }) => {
   const tasks = useTaskStore((state) => state.tasks);
-
+  const [timerSeconds, setTimerSeconds] = useState(0);
   const isLoading = useTaskStore((state) => state.isLoading);
   const allTasks = React.useMemo(() => {
     return [...(tasks || [])].sort((a, b) => {
@@ -118,7 +118,7 @@ const Tasks = ({ view, filter }) => {
       setActionClicked(false);
     }
   };
-  const onEdit = async () => {};
+
   const onMark = async () => {
     setisPending(true);
     try {
@@ -175,14 +175,17 @@ const Tasks = ({ view, filter }) => {
   return (
     <>
       <Toast toastData={toastData} show={toastData.show} />
-      <AddTaskForm
-        setActionClicked={setActionClicked}
-        initialTaskDetails={initialDetails}
-        isOpen={editingForm}
-        editingTask={editingTask}
-        seteditingTask={seteditingTask}
-        setIsOpen={setEditingForm}
-      />
+      {editingForm && (
+        <AddTaskForm
+          setActionClicked={setActionClicked}
+          initialTaskDetails={initialDetails}
+          isOpen={editingForm}
+          editingTask={editingTask}
+          seteditingTask={seteditingTask}
+          setIsOpen={setEditingForm}
+        />
+      )}
+
       <AnimatePresence>
         {actionClicked && (
           <ShowDialog
@@ -190,7 +193,6 @@ const Tasks = ({ view, filter }) => {
             onDelete={onDelete}
             action={action}
             setActionClicked={setActionClicked}
-            onEdit={onEdit}
             onMark={onMark}
             isPending={isPending}
             seteditingTask={seteditingTask}
@@ -239,6 +241,8 @@ const Tasks = ({ view, filter }) => {
               ) : (
                 allTasks.map((task, idx) => (
                   <Task
+                    timerSeconds={timerSeconds}
+                    setTimerSeconds={setTimerSeconds}
                     filter={filter}
                     status={task.status}
                     key={task._id}
