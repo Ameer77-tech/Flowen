@@ -171,7 +171,6 @@ const Tasks = ({ view, filter }) => {
       setActionClicked(false);
     }
   };
- 
 
   return (
     <>
@@ -181,6 +180,7 @@ const Tasks = ({ view, filter }) => {
         initialTaskDetails={initialDetails}
         isOpen={editingForm}
         editingTask={editingTask}
+        seteditingTask={seteditingTask}
         setIsOpen={setEditingForm}
       />
       <AnimatePresence>

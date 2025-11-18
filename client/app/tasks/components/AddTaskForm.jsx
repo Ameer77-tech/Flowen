@@ -33,6 +33,7 @@ const AddTaskForm = ({
   initialTaskDetails,
   editingTask,
   setActionClicked,
+  seteditingTask,
 }) => {
   const defaultTaskState = {
     title: "",
@@ -59,12 +60,15 @@ const AddTaskForm = ({
     return defaultTaskState;
   };
   const [taskDetails, setTaskDetails] = useState(() =>
-    buildFormState(initialTaskDetails)
+    buildFormState(
+      initialTaskDetails === undefined ? defaultTaskState : initialTaskDetails
+    )
   );
+  console.log(taskDetails, "here");
 
   useEffect(() => {
     setTaskDetails(buildFormState(initialTaskDetails));
-  }, [initialTaskDetails]);
+  }, [initialTaskDetails, editingTask]);
 
   const [toastData, setToastData] = useState({
     message: "",
@@ -128,8 +132,8 @@ const AddTaskForm = ({
         isSuccess: false,
       });
     } finally {
-      setTaskDetails(initialTaskDetails);
       setIsOpen(false);
+      setTaskDetails(buildFormState(initialTaskDetails ?? defaultTaskState));
       setisPending(false);
     }
   };
@@ -146,7 +150,6 @@ const AddTaskForm = ({
         body: JSON.stringify(payload),
       });
       const data = await response.json();
-      console.log(data);
 
       if (!data.success) {
         setToastData({
@@ -179,10 +182,11 @@ const AddTaskForm = ({
         isSuccess: false,
       });
     } finally {
-      setTaskDetails(initialTaskDetails);
       setIsOpen(false);
+      setTaskDetails(buildFormState(initialTaskDetails));
       setisPending(false);
       setActionClicked(false);
+      seteditingTask("");
     }
   };
 
@@ -201,126 +205,133 @@ const AddTaskForm = ({
   };
 
   return (
-    <AnimatePresence>
+    <>
       <Toast key="toast" show={showToast} toastData={toastData} />
-      {isOpen && (
-        <>
-          <motion.div
-            key="overlay"
-            className="fixed inset-0 bg-black/50 z-40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setIsOpen(false)}
-          />
-          <motion.div
-            onClick={() => setIsOpen(false)}
-            className="fixed z-50 inset-0 flex items-center justify-center"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div
-              className="w-full max-w-md bg-secondary p-6 shadow-2xl rounded-xl relative max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              key="overlay"
+              className="fixed inset-0 bg-black/50 z-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsOpen(false)}
+            />
+            <motion.div
+              className="fixed z-50 inset-0 flex items-center justify-center"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
             >
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
+              <div
+                className="w-full max-w-md bg-secondary p-6 shadow-2xl rounded-xl relative max-h-[90vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
               >
-                ✕
-              </button>
-              <h2 className="text-2xl font-bold mb-2 text-center">
-                {editingTask === undefined ? (
-                  <p>🚀 Create New Task </p>
-                ) : (
-                  <p>Edit Task</p>
-                )}
-              </h2>
-              <p className="text-center text-gray-500 mb-6">
-                {editingTask === undefined ? (
-                  <span>Enter the details for your new task below.</span>
-                ) : (
-                  <span> Edit the Details of Your Tasks </span>
-                )}
-              </p>
-              <form
-                onSubmit={editingTask === undefined ? handleSubmit : handleEdit}
-                className="space-y-4"
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="title">Task Title</Label>
-                  <Input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value={taskDetails.title}
-                    onChange={handleChange}
-                    placeholder="e.g., Finalize Q3 Budget"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description (Optional)</Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    value={taskDetails.description}
-                    onChange={handleChange}
-                    placeholder="Detailed notes or requirements..."
-                    className="resize-none"
-                    rows={3}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="dueDate">Due Date</Label>
-                  <Input
-                    required
-                    type="date"
-                    id="dueDate"
-                    name="dueDate"
-                    value={taskDetails.dueDate}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="priority">Priority</Label>
-                  <Select
-                    value={String(taskDetails.priority)}
-                    onValueChange={(value) => handlePriorityChange(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select priority" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">High</SelectItem>
-                      <SelectItem value="2">Medium</SelectItem>
-                      <SelectItem value="3">Low</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                {isPending ? (
-                  <Button disabled size="sm" className={"w-full"}>
-                    <Spinner className={"size-2"} />
-                    Add Task
-                  </Button>
-                ) : (
-                  <Button type="submit" className="w-full">
-                    {editingTask === undefined ? (
-                      <p>Add Task</p>
-                    ) : (
-                      <p>Edit Task</p>
-                    )}
-                  </Button>
-                )}
-              </form>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
+                >
+                  ✕
+                </button>
+                <h2 className="text-2xl font-bold mb-2 text-center">
+                  {editingTask === undefined ? (
+                    <p>🚀 Create New Task </p>
+                  ) : (
+                    <p>Edit Task</p>
+                  )}
+                </h2>
+                <p className="text-center text-gray-500 mb-6">
+                  {editingTask === undefined ? (
+                    <span>Enter the details for your new task below.</span>
+                  ) : (
+                    <span> Edit the Details of Your Tasks </span>
+                  )}
+                </p>
+                <form
+                  onSubmit={
+                    editingTask === undefined ? handleSubmit : handleEdit
+                  }
+                  className="space-y-4"
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Task Title</Label>
+                    <Input
+                      type="text"
+                      id="title"
+                      name="title"
+                      value={taskDetails.title}
+                      onChange={handleChange}
+                      placeholder="e.g., Finalize Q3 Budget"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Description (Optional)</Label>
+                    <Textarea
+                      id="description"
+                      name="description"
+                      value={taskDetails.description}
+                      onChange={handleChange}
+                      placeholder="Detailed notes or requirements..."
+                      className="resize-none"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dueDate">Due Date</Label>
+                    <Input
+                      required
+                      type="date"
+                      id="dueDate"
+                      name="dueDate"
+                      value={taskDetails.dueDate}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="priority">Priority</Label>
+                    <Select
+                      value={String(taskDetails.priority)}
+                      onValueChange={(value) => handlePriorityChange(value)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">High</SelectItem>
+                        <SelectItem value="2">Medium</SelectItem>
+                        <SelectItem value="3">Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {isPending ? (
+                    <Button disabled size="sm" className={"w-full"}>
+                      <Spinner className={"size-2"} />
+                      {editingTask === undefined ? (
+                        <p>Add Task</p>
+                      ) : (
+                        <p>Edit Task</p>
+                      )}
+                    </Button>
+                  ) : (
+                    <Button type="submit" className="w-full">
+                      {editingTask === undefined ? (
+                        <p>Add Task</p>
+                      ) : (
+                        <p>Edit Task</p>
+                      )}
+                    </Button>
+                  )}
+                </form>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
