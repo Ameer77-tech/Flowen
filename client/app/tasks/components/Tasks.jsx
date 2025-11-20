@@ -201,26 +201,13 @@ const Tasks = ({ view, filter }) => {
     return `${h}:${m}:${s}`;
   };
   useEffect(() => {
-    const handleUnload = () => {
-      if (!runningTask) return;
-      const task = tasks.find((t) => t._id === runningTask);
-      if (!task) return;
-      navigator.sendBeacon(
-        `${apiUrl}/edit-task/${runningTask}`,
-        new Blob([JSON.stringify({ timer: task.timer })], {
-          type: "application/json",
-        })
-      );
+    return () => {
+      saveTimerToDB(runningTask);
     };
-
-    window.addEventListener("beforeunload", handleUnload);
-    return () => window.removeEventListener("beforeunload", handleUnload);
-  }, [runningTask, tasks]);
+  }, []);
 
   const saveTimerToDB = async (id) => {
     const task = tasks.find((t) => t._id === id);
-    console.log(task);
-
     if (!task) return;
     await updateTimerInDb(id, { timer: task.timer });
   };
@@ -294,12 +281,11 @@ const Tasks = ({ view, filter }) => {
           <TableBody className={"bg-secondary"}>
             <AnimatePresence>
               {isLoading ? (
-                <TableRow>
-                  <TableCell
-                    className={"flex justify-center items-center"}
-                    colSpan={5}
-                  >
-                    <Spinner className={"size-5"} />
+                <TableRow className="text-muted-foreground bg-background h-50">
+                  <TableCell className="text-center" colSpan={5}>
+                    <Spinner
+                      className={"size-5 absolute left-1/2 -translate-x-1/2"}
+                    />
                   </TableCell>
                 </TableRow>
               ) : allTasks.length < 1 ? (

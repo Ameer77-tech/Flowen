@@ -125,7 +125,7 @@ export const getTasks = async (req, res) => {
   }
 };
 export const editTask = async (req, res) => {
-  console.log(req.body);
+  console.log("HERE", req.body);
   if (!req.body) {
     return res.status(400).json({ reply: "Empty Body", success: false });
   }
