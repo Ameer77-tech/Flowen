@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Task from "./Task";
 import {
   Table,
@@ -22,7 +22,6 @@ import AddTaskForm from "./AddTaskForm";
 
 const Tasks = ({ view, filter }) => {
   const tasks = useTaskStore((state) => state.tasks);
-  const [timerSeconds, setTimerSeconds] = useState(0);
   const isLoading = useTaskStore((state) => state.isLoading);
   const allTasks = React.useMemo(() => {
     return [...(tasks || [])].sort((a, b) => {
@@ -38,7 +37,6 @@ const Tasks = ({ view, filter }) => {
       return da - db;
     });
   }, [tasks]);
-
   const removeTask = useTaskStore((state) => state.removeTask);
   const editTask = useTaskStore((state) => state.updateTask);
   const [toastData, settoastData] = useState({
@@ -172,6 +170,78 @@ const Tasks = ({ view, filter }) => {
     }
   };
 
+  /* TIMERRRRR LOGIC */
+  const timerIntervalRef = useRef(null);
+  const [runningTask, setrunningTask] = useState("");
+  const updateTimer = useTaskStore((state) => state.updateTimer);
+
+  const onPlay = (id) => {
+    if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+    setrunningTask(id);
+    timerIntervalRef.current = setInterval(() => {
+      updateTimer(id);
+    }, 1000);
+  };
+
+  const onPause = async (id) => {
+    await saveTimerToDB(id);
+    clearInterval(timerIntervalRef.current);
+    setrunningTask("");
+  };
+  const onReset = async (id) => {
+    clearInterval(timerIntervalRef.current);
+    editTask(id, { timer: 0 });
+    await updateTimerInDb(id, { timer: 0 });
+    setrunningTask("");
+  };
+  const formatTime = (seconds) => {
+    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
+    return `${h}:${m}:${s}`;
+  };
+  useEffect(() => {
+    const handleUnload = () => {
+      if (!runningTask) return;
+      const task = tasks.find((t) => t._id === runningTask);
+      if (!task) return;
+      navigator.sendBeacon(
+        `${apiUrl}/edit-task/${runningTask}`,
+        new Blob([JSON.stringify({ timer: task.timer })], {
+          type: "application/json",
+        })
+      );
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, [runningTask, tasks]);
+
+  const saveTimerToDB = async (id) => {
+    const task = tasks.find((t) => t._id === id);
+    console.log(task);
+
+    if (!task) return;
+    await updateTimerInDb(id, { timer: task.timer });
+  };
+
+  const updateTimerInDb = async (id, data) => {
+    try {
+      const response = await fetch(`${apiUrl}/edit-task/${id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      const res = await response.json();
+      if (!res.success) console.log("Save failed:", res);
+    } catch (err) {
+      console.log("DB Save error:", err);
+    }
+  };
+
+  /* TIMERRRRR LOGIC */
+
   return (
     <>
       <Toast toastData={toastData} show={toastData.show} />
@@ -241,8 +311,6 @@ const Tasks = ({ view, filter }) => {
               ) : (
                 allTasks.map((task, idx) => (
                   <Task
-                    timerSeconds={timerSeconds}
-                    setTimerSeconds={setTimerSeconds}
                     filter={filter}
                     status={task.status}
                     key={task._id}
@@ -251,10 +319,15 @@ const Tasks = ({ view, filter }) => {
                     desc={task.description}
                     priority={task.priority}
                     timer={task.timer}
+                    formatTime={formatTime}
                     due={task.dueDate}
                     setActionClicked={setActionClicked}
                     settaskData={settaskData}
                     setaction={setaction}
+                    runningTask={runningTask}
+                    onPlay={onPlay}
+                    onPause={onPause}
+                    onReset={onReset}
                   />
                 ))
               )}

@@ -22,78 +22,31 @@ const Task = ({
   desc,
   filter,
   due,
-  timer,
   priority,
   setActionClicked,
   setaction,
   settaskData,
-  setTimerSeconds,
-  timerSeconds,
+  timer,
+  formatTime,
+  runningTask,
+  onPlay,
+  onPause,
+  onReset,
 }) => {
-  const updateTask = useTaskStore((state) => state.updateTask);
-  const [ready, setReady] = useState(false);
-  const intervalRef = useRef(null);
-  useEffect(() => {
-    setTimerSeconds(timer);
-  }, [timer]);
+  // const updateTask = useTaskStore((state) => state.updateTask);
+  // const [ready, setReady] = useState(false);
+  // const intervalRef = useRef(null);
 
-  useEffect(() => {
-    return () => {
-      saveTimerToDB();
-    };
-  }, []);
+  // useEffect(() => {
+  //   setTimerSeconds(timer);
+  // }, [timer]);
 
-  const saveTimerToDB = async () => {
-    await updateTimer({ timer: timerSeconds });
-  };
 
-  const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/tasks`;
 
-  const updateTimer = async (data) => {
-    const payload = { timer: data.timer };
-    try {
-      const response = await fetch(`${apiUrl}/edit-task/${id}`, {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json();
-      if (!data.success) {
-        console.log(data);
-      } else {
-        updateTask(id, data.updatedTask);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
-  const onPlay = () => {
-    setReady(true);
-    intervalRef.current = setInterval(() => {
-      setTimerSeconds((prev) => prev + 1);
-    }, 1000);
-  };
-  const onPause = () => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
-    setReady(false);
-    console.log("HERERE");
-    updateTimer({ timer: timerSeconds });
-  };
-  const onReset = () => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
-    setTimerSeconds(0);
-    setReady(false);
-  };
-  const formatTime = (seconds) => {
-    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
-    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
-    const s = String(seconds % 60).padStart(2, "0");
-    return `${h}:${m}:${s}`;
-  };
+ 
+
+ 
 
   return (
     <TableRow
@@ -131,19 +84,19 @@ const Task = ({
       <TableCell>
         <div className="flex items-center gap-3">
           <span className="text-sm font-semibold">
-            {timerSeconds === 0 ? "00:00:00" : formatTime(timerSeconds)}
+            {timer === 0 ? "00:00:00" : formatTime(timer)}
           </span>
 
-          {ready ? (
+          {runningTask === id ? (
             <button
-              onClick={onPause}
+              onClick={() => onPause(id)}
               className="hover:text-white text-muted-foreground transition-all ease"
             >
               <Pause size={20} />
             </button>
           ) : (
             <button
-              onClick={onPlay}
+              onClick={() => onPlay(id)}
               className="hover:text-white text-muted-foreground transition-all ease"
             >
               <PlayIcon size={20} />
@@ -151,7 +104,7 @@ const Task = ({
           )}
 
           <button
-            onClick={onReset}
+            onClick={() => onReset(id)}
             className="hover:text-white text-muted-foreground transition-all ease"
           >
             <RotateCcw size={20} />

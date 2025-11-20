@@ -10,7 +10,6 @@ const useTaskStore = create((set) => ({
       tasks: [...state.tasks, task],
     })),
   removeTask: (taskId) => {
-    console.log(taskId);
     set((state) => ({
       tasks: state.tasks.filter((task) => task._id !== taskId),
     }));
@@ -19,6 +18,12 @@ const useTaskStore = create((set) => ({
     set((state) => ({
       tasks: state.tasks.map((task) =>
         task._id === taskId ? { ...task, ...updatedTask } : task
+      ),
+    })),
+  updateTimer: (taskId) =>
+    set((state) => ({
+      tasks: state.tasks.map((task) =>
+        task._id === taskId ? { ...task, timer : task.timer + 1 } : task
       ),
     })),
   setTasks: (Tasks) => set({ tasks: Tasks.tasks }),
