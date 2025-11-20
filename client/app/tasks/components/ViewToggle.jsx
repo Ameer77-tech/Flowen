@@ -15,13 +15,17 @@ const ViewToggle = ({ view }) => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    
     if (viewCardRef.current) {
       const rect = viewCardRef.current.getBoundingClientRect();
       setviewCardPos(rect.left);
     }
     if (tabRef.current) {
-      setleft(tabRef.current.getBoundingClientRect().left);
+      setleft(
+        view === "grid"
+          ? tabRef.current.getBoundingClientRect().left +
+              tabRef.current.getBoundingClientRect().width
+          : tabRef.current.getBoundingClientRect().left
+      );
       setwidth(tabRef.current.getBoundingClientRect().width);
     }
   }, []);
