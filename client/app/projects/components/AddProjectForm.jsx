@@ -1,0 +1,232 @@
+"use client";
+import Toast from "@/components/Toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AnimatePresence, motion } from "motion/react";
+import React, { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+
+const defaultProjectState = {
+  title: "",
+  description: "",
+  dueDate: "",
+  priority: 2,
+  status: "not-started",
+};
+
+const AddProjectForm = ({ isOpen, setIsOpen, editingTask, projectDetails }) => {
+  const [projectData, setProjectData] = useState(
+    projectDetails ? projectDetails : defaultProjectState
+  );
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({
+    message: "",
+    type: "",
+    isSuccess: false,
+  });
+  const [isPending, setIsPending] = useState(false);
+
+  const showError = (msg) => {
+    setToastData({ message: msg, type: "error", isSuccess: false });
+    setShowToast(true);
+  };
+
+  const handleChange = (e) => {
+    setProjectData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handlePriorityChange = (value) => {
+    setProjectData((prev) => ({ ...prev, priority: Number(value) }));
+  };
+
+  const validate = () => {
+    if (!projectData.title.trim()) return showError("Title is required");
+    if (!projectData.dueDate) return showError("Due date is required");
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setIsPending(true);
+    
+    setToastData({
+      message: "Project added successfully",
+      type: "success",
+      isSuccess: true,
+    });
+
+    setShowToast(true);
+    setIsPending(false);
+    setIsOpen(false);
+    setProjectData(defaultProjectState);
+  };
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setIsPending(true);
+
+    setToastData({
+      message: "Project updated successfully",
+      type: "success",
+      isSuccess: true,
+    });
+
+    setShowToast(true);
+    setIsPending(false);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <Toast key="toast" show={showToast} toastData={toastData} />
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              key="overlay"
+              className="fixed inset-0 bg-black/50 z-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => {
+                setIsOpen(false);
+                setProjectData(defaultProjectState);
+              }}
+            />
+
+            <motion.div
+              className="fixed z-50 inset-0 flex items-center justify-center"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div
+                className="w-full max-w-md bg-secondary p-6 shadow-2xl rounded-xl relative max-h-[90vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setProjectData(defaultProjectState);
+                  }}
+                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
+                >
+                  ✕
+                </button>
+
+                <h2 className="text-2xl font-bold mb-2 text-center">
+                  {editingTask ? "Edit Project" : "🚀 Create New Project"}
+                </h2>
+
+                <p className="text-center text-gray-500 mb-6">
+                  {editingTask
+                    ? "Edit the Details of Your Project"
+                    : "Enter the details for your new Project below."}
+                </p>
+
+                <form
+                  onSubmit={editingTask ? handleEdit : handleSubmit}
+                  className="space-y-4"
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Project Title</Label>
+                    <Input
+                      type="text"
+                      id="title"
+                      name="title"
+                      value={projectData.title}
+                      onChange={handleChange}
+                      placeholder="e.g., Portfolio Website Redesign"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      name="description"
+                      value={projectData.description}
+                      onChange={handleChange}
+                      placeholder="Detailed notes or requirements..."
+                      className="resize-none"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="dueDate">Due Date</Label>
+                    <Input
+                      required
+                      type="date"
+                      id="dueDate"
+                      name="dueDate"
+                      value={projectData.dueDate}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="priority">Priority</Label>
+                    <Select
+                      value={String(projectData.priority)}
+                      onValueChange={handlePriorityChange}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">High</SelectItem>
+                        <SelectItem value="2">Medium</SelectItem>
+                        <SelectItem value="3">Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2 flex justify-between">
+                    <Label htmlFor="planning">Still Planning?</Label>
+                    <Switch
+                      onClick={() =>
+                        setProjectData((prev) => ({
+                          ...prev,
+                          status:
+                            prev.status.toLowerCase() !== "planning"
+                              ? "planning"
+                              : "not-started",
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full" disabled={isPending}>
+                    {isPending
+                      ? editingTask
+                        ? "Updating..."
+                        : "Adding..."
+                      : editingTask
+                      ? "Edit Project"
+                      : "Add Project"}
+                  </Button>
+                </form>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+export default AddProjectForm;
