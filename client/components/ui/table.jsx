@@ -62,7 +62,7 @@ function TableRow({
     <tr
       data-slot="table-row"
       className={cn(
-        "data-[state=selected]:bg-muted border-b border-muted-foreground/20 transition-colors",
+        "data-[state=selected]:bg-muted transition-colors",
         className
       )}
       {...props} />

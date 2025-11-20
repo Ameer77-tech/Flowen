@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Task from "./Task";
 import {
   Table,
@@ -23,7 +23,7 @@ import AddTaskForm from "./AddTaskForm";
 const Tasks = ({ view, filter }) => {
   const tasks = useTaskStore((state) => state.tasks);
   const isLoading = useTaskStore((state) => state.isLoading);
-  const allTasks = React.useMemo(() => {
+  const allTasks = useMemo(() => {
     return [...(tasks || [])].sort((a, b) => {
       if (a.status === "completed" && b.status !== "completed") return 1;
       if (a.status !== "completed" && b.status === "completed") return -1;
@@ -200,12 +200,18 @@ const Tasks = ({ view, filter }) => {
     const s = String(seconds % 60).padStart(2, "0");
     return `${h}:${m}:${s}`;
   };
+
   useEffect(() => {
-    return () => {
+    const handleUnload = () => {
+      if (!runningTask) return;
+
+      const task = tasks.find((t) => t._id === runningTask);
+      if (!task) return;
       saveTimerToDB(runningTask);
     };
-  }, []);
-
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, [runningTask, tasks]);
   const saveTimerToDB = async (id) => {
     const task = tasks.find((t) => t._id === id);
     if (!task) return;
@@ -262,7 +268,7 @@ const Tasks = ({ view, filter }) => {
         {/* PC */}
         <Table
           className={clsx(
-            "",
+            "overflow-visible",
             view == "list" ? "hidden md:inline-table" : "md:hidden"
           )}
         >
@@ -278,7 +284,7 @@ const Tasks = ({ view, filter }) => {
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className={"bg-secondary"}>
+          <TableBody className={"bg-secondary overflow-visible"}>
             <AnimatePresence>
               {isLoading ? (
                 <TableRow className="text-muted-foreground bg-background h-50">
@@ -301,6 +307,7 @@ const Tasks = ({ view, filter }) => {
                     status={task.status}
                     key={task._id}
                     id={task._id}
+                    index={idx}
                     name={task.title}
                     desc={task.description}
                     priority={task.priority}
