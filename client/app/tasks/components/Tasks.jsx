@@ -340,16 +340,24 @@ const Tasks = ({ view, filter }) => {
           ) : (
             allTasks.map((task, idx) => (
               <MobileTask
+                filter={filter}
+                status={task.status}
                 key={task._id}
                 id={task._id}
+                index={idx}
                 name={task.title}
                 desc={task.description}
                 priority={task.priority}
                 timer={task.timer}
+                formatTime={formatTime}
                 due={task.dueDate}
                 setActionClicked={setActionClicked}
                 settaskData={settaskData}
                 setaction={setaction}
+                runningTask={runningTask}
+                onPlay={onPlay}
+                onPause={onPause}
+                onReset={onReset}
               />
             ))
           )}

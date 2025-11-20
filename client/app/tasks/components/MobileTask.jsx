@@ -16,6 +16,7 @@ import {
   LucidePlay,
   RotateCcw,
   Trash2,
+  LucidePause,
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -25,15 +26,16 @@ const MobileTask = ({
   desc,
   due,
   timer,
+  status,
   priority,
   onPlay,
   onPause,
-  onRestart,
-  onComplete,
-  onEdit,
+  onReset,
   setActionClicked,
   setaction,
   settaskData,
+  formatTime,
+  runningTask,
 }) => {
   const isCompleted = status.toLowerCase() === "completed" || false;
 
@@ -41,7 +43,12 @@ const MobileTask = ({
     <Card
       className={clsx(
         "border border-gray-700/40 p-4 rounded-xl shadow-sm backdrop-blur-sm transition-all",
-        isCompleted ? "opacity-60 pointer-events-none" : "opacity-100"
+        isCompleted ? "opacity-60 pointer-events-none" : "opacity-100",
+        runningTask === ""
+          ? ""
+          : runningTask === id
+          ? "scale-105 duration-300 transition-all ease"
+          : "opacity-50"
       )}
     >
       <CardHeader className="p-0 flex flex-row justify-between items-start">
@@ -101,14 +108,36 @@ const MobileTask = ({
       </CardContent>
       <CardFooter className="p-0 mt-4 flex justify-between items-center">
         <div className="text-lg font-bold tracking-tight">
-          {timer || "00:00:00"}
+          {timer === 0 ? "00:00:00" : formatTime(timer)}
         </div>
 
         <div className="flex gap-3 items-center">
-          <button className="w-11 h-11 rounded-full bg-accent flex items-center justify-center hover:bg-accent/90 shadow-sm transition">
-            <LucidePlay size={18} className="text-white" />
-          </button>
-          <button className="w-11 h-11 rounded-full bg-accent/20 flex items-center justify-center hover:bg-accent/40 transition">
+          {runningTask === id ? (
+            <button className="w-11 h-11 rounded-full bg-accent flex items-center justify-center hover:bg-accent/90 shadow-sm transition">
+              <LucidePause
+                onClick={() => onPause(id)}
+                size={18}
+                fill="accent"
+                color="accent"
+                className=""
+              />{" "}
+            </button>
+          ) : (
+            <button className="w-11 h-11 rounded-full bg-accent flex items-center justify-center hover:bg-accent/90 shadow-sm transition">
+              <LucidePlay
+                onClick={() => onPlay(id)}
+                size={18}
+                fill="accent"
+                color="accent"
+                className=""
+              />
+            </button>
+          )}
+
+          <button
+            onClick={() => onReset(id)}
+            className="w-11 h-11 rounded-full bg-accent/20 flex items-center justify-center hover:bg-accent/40 transition"
+          >
             <RotateCcw size={16} className="text-blue-500" />
           </button>
           <button
