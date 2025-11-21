@@ -7,11 +7,24 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { CalendarDays, CheckCircle, ChevronRight } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle,
+  ChevronRight,
+  MoreVertical,
+} from "lucide-react";
 import clsx from "clsx";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, hoveredProject, setHoveredProject }) => {
+  const isMobile = useIsMobile();
   const progress =
     project.totalTasks > 0
       ? Math.round((project.totalDone / project.totalTasks) * 100)
@@ -24,18 +37,31 @@ const ProjectCard = ({ project }) => {
     project.status.toLowerCase() === "planning" && "text-fuchsia-600",
     project.status.toLowerCase() === "completed" && "text-emerald-600"
   );
-
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString();
   };
-
   return (
-    <Link href={`/projects/${project._id}`} className="w-full">
-      <Card
-        className={clsx(
-          "group relative border border-border/60 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out rounded-2xl hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-        )}
-      >
+    <Card
+      onMouseEnter={() => setHoveredProject(project._id)}
+      className={clsx(
+        "group relative border border-border/60 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out rounded-2xl hover:scale-[1.02] active:scale-[0.98]"
+      )}
+    >
+      {(isMobile || hoveredProject == project._id) && (
+        <div className="absolute top-3 right-3 z-50 w-5 h-5">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              {" "}
+              <MoreVertical size={20} className="text-muted-foreground" />{" "}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
+      <Link href={`/projects/${project._id}`} className="w-full">
         <CardHeader className="flex px-5 py-2 flex-col md:flex-row justify-between items-start md:items-center gap-2">
           <div className="flex flex-col">
             <CardTitle className="text-base md:text-lg font-semibold text-foreground">
@@ -79,8 +105,8 @@ const ProjectCard = ({ project }) => {
             ></div>
           </div>
         </CardFooter>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 };
 
