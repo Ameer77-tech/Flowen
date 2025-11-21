@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import useProjectStore from "@/app/Store/project.store";
 
 const defaultProjectState = {
   title: "",
@@ -27,6 +28,7 @@ const AddProjectForm = ({ isOpen, setIsOpen, editingTask, projectDetails }) => {
   const [projectData, setProjectData] = useState(
     projectDetails ? projectDetails : defaultProjectState
   );
+  const createProject = useProjectStore((state) => state.createProject);
   const [showToast, setShowToast] = useState(false);
   const [toastData, setToastData] = useState({
     message: "",
@@ -57,19 +59,53 @@ const AddProjectForm = ({ isOpen, setIsOpen, editingTask, projectDetails }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    console.log(projectData);
     setIsPending(true);
-    
-    setToastData({
-      message: "Project added successfully",
-      type: "success",
-      isSuccess: true,
-    });
-
-    setShowToast(true);
-    setIsPending(false);
-    setIsOpen(false);
-    setProjectData(defaultProjectState);
+    try {
+      const response = await fetch(`${apiUrl}/add-project`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(projectData),
+      });
+      const res = await response.json();
+      if (!res.success) {
+        setShowToast(true);
+        setToastData({
+          message: res.reply,
+          type: "error",
+          isSuccess: false,
+        });
+      } else {
+        createProject(res.created);
+        setShowToast(true);
+        setToastData({
+          message: res.reply,
+          type: "success",
+          isSuccess: true,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      setShowToast(true);
+      setToastData({
+        message: "Server Error",
+        type: "error",
+        isSuccess: false,
+      });
+    } finally {
+      setIsPending(false);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      setIsOpen(false);
+      setProjectData(defaultProjectState);
+    }
   };
+
+  const apiUrl = `${process.env.NEXT_PUBLIC_XTASK_BACKEND}/api/projects`;
 
   const handleEdit = async (e) => {
     e.preventDefault();
@@ -81,7 +117,6 @@ const AddProjectForm = ({ isOpen, setIsOpen, editingTask, projectDetails }) => {
       type: "success",
       isSuccess: true,
     });
-
     setShowToast(true);
     setIsPending(false);
     setIsOpen(false);

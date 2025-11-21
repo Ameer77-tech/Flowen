@@ -9,7 +9,7 @@ export const addProject = async (req, res) => {
       reply: "Empty request body",
     });
   }
-  const { title, description, dueDate, priority } = req.body;
+  const { title, description, dueDate, priority, status } = req.body;
   if (!title || title.trim().length === 0) {
     return res.status(400).json({
       success: false,
@@ -41,6 +41,7 @@ export const addProject = async (req, res) => {
       description: description,
       dueDate: dueDate,
       priority: priority,
+      status: status,
     };
     try {
       const created = await projectsModel.create(project);
@@ -49,7 +50,9 @@ export const addProject = async (req, res) => {
           .status(500)
           .json({ reply: "Error Creating project", success: false });
       }
-      return res.status(200).json({ reply: "project created", success: true });
+      return res
+        .status(200)
+        .json({ reply: "project created", success: true, created });
     } catch (err) {
       return res
         .status(500)

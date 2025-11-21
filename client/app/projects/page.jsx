@@ -29,8 +29,7 @@ const page = async ({ params, searchParams }) => {
     }
   );
   const data = await res.json();
-
-  const projects = data.payload;
+  const projects = data.success ? data.payload : [];
   return (
     <>
       <ProjectInitializer data={projects} />

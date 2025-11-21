@@ -6,7 +6,7 @@ const useProjectStore = create((set) => ({
   setPending: (val) => set((state) => ({ isPending: val })),
   setProjects: (data) => set((state) => ({ projects: [...data] })),
   createProject: (data) =>
-    set((state) => ({ projects: [...state.projects, ...data] })),
+    set((state) => ({ projects: [...state.projects, data] })),
   updateProject: (projectId, data) =>
     set((state) => ({
       projects: state.projects.map((project) =>
