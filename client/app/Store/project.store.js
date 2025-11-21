@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const useProjectStore = create((set) => ({
   projects: [],
-  isPending: false,
+  isPending: true,
   setPending: (val) => set((state) => ({ isPending: val })),
   setProjects: (data) => set((state) => ({ projects: [...data] })),
   createProject: (data) =>

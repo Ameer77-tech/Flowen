@@ -60,12 +60,21 @@ export const addProject = async (req, res) => {
 export const getProjects = async (req, res) => {
   const userId = req.user.id;
   try {
-    const allProjects = await projectsModel.find({ createdBy: userId });
+    const allProjects = await projectsModel.find({ createdBy: userId }).lean();
+
+    const payload = allProjects.map((project) => ({
+      ...project,
+      totalTasks: project.tasks?.length,
+    }));
+
     return res
       .status(200)
-      .json({ reply: "Projects Fetched", success: true, allProjects });
+      .json({ reply: "Projects Fetched", success: true, payload });
   } catch (err) {
-    res.status(500).json({ reply: "Internal Server Error", success: false });
+    console.log(err);
+    res
+      .status(500)
+      .json({ reply: "Internal Server Error", success: false, err });
   }
 };
 export const getProject = async (req, res) => {

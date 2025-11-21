@@ -37,8 +37,9 @@ const projectSchema = new mongoose.Schema({
     default: 0,
   },
   tasks: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [mongoose.Schema.Types.ObjectId],
     ref: "tasks",
+    default: [],
   },
 });
 

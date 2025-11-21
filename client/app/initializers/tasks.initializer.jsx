@@ -12,7 +12,9 @@ const TasksInitializer = ({ taskData }) => {
     try {
       localStorage.removeItem("task-store");
       localStorage.removeItem("persist:task-store");
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
 
     setTasks({ tasks: taskData });
     setLoading(false);
