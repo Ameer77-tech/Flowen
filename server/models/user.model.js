@@ -4,9 +4,6 @@ const userSchema = new mongoose.Schema(
   {
     userName: {
       type: "String",
-      unique: () => {
-        return this.provider === "local";
-      },
     },
     displayName: {
       type: "String",

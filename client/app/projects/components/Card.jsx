@@ -59,7 +59,7 @@ const ProjectCard = ({ project }) => {
           <div className="flex items-center gap-2 text-muted-foreground">
             <CheckCircle className="text-green-500" size={16} />
             <span>
-              {project.totalTasksCompleted}/{project.totalTasks}
+              {project.totaltasksCompleted}/{project.totalTasks}
             </span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">

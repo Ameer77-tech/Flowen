@@ -28,6 +28,9 @@ export default async function TasksSection({ filter, view }) {
   );
 
   const data = await res.json();
+  if (!data.success) {
+    return redirect("/login");
+  }
   const tasks = data.success ? data.tasks : [];
 
   return (

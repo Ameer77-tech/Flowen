@@ -1,10 +1,15 @@
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Pencil } from "lucide-react";
 
-// Simulated server data (replace later with your DB/session)
 const getUserData = async () => {
   return {
     displayName: "Ameer Shaik",
@@ -44,28 +49,48 @@ const Account = async () => {
             </div>
 
             <div className="text-center sm:text-left">
-              <p className="text-base font-medium text-foreground">{user.displayName}</p>
+              <p className="text-base font-medium text-foreground">
+                {user.displayName}
+              </p>
               <p className="text-sm text-muted-foreground">@{user.username}</p>
             </div>
           </div>
 
           {/* Display Name */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Display Name</label>
-            <Input value={user.displayName} disabled className="bg-background" />
+            <label className="text-sm font-medium text-foreground">
+              Display Name
+            </label>
+            <Input
+              value={user.displayName}
+              disabled
+              className="bg-background"
+            />
           </div>
 
           {/* Username */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Username</label>
-            <Input value={user.username} disabled className="bg-background opacity-80" />
+            <label className="text-sm font-medium text-foreground">
+              Username
+            </label>
+            <Input
+              value={user.username}
+              disabled
+              className="bg-background opacity-80"
+            />
           </div>
 
           {/* Email Section */}
           {user.email ? (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Email</label>
-              <Input value={user.email} disabled className="bg-background opacity-80" />
+              <label className="text-sm font-medium text-foreground">
+                Email
+              </label>
+              <Input
+                value={user.email}
+                disabled
+                className="bg-background opacity-80"
+              />
             </div>
           ) : (
             <div className="flex flex-col gap-2">

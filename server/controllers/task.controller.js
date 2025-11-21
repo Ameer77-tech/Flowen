@@ -94,8 +94,8 @@ export const getTasks = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ reply: "Empty Body", success: false });
   }
-
   const userId = req.user.id;
+
   const data = req.body;
   const type = String(data.type || "").toLowerCase();
   const filter = String(data.filter || "").toLowerCase();
@@ -125,7 +125,6 @@ export const getTasks = async (req, res) => {
   }
 };
 export const editTask = async (req, res) => {
-  console.log("HERE", req.body);
   if (!req.body) {
     return res.status(400).json({ reply: "Empty Body", success: false });
   }

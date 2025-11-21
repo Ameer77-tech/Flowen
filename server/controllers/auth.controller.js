@@ -22,7 +22,8 @@ export const registerUser = async (req, res) => {
         userName: data.userName,
         provider: "local",
       });
-      if (exists.length) {
+      console.log(exists);
+      if (exists.length > 0) {
         return res.status(409).json({
           reply: "User with that username already exists.",
           success: false,
