@@ -56,6 +56,11 @@ const ProjectCard = ({
         "group relative border border-border/60 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out rounded-2xl hover:scale-[1.02] active:scale-[0.98]"
       )}
     >
+      {project.completed && (
+        <div className="font-mono w-full h-full shadow-inner bg-black/70 shadow-black absolute inset-0 z-20 flex justify-center items-center text-primary text-sm font-semibold">
+          COMPLETED
+        </div>
+      )}
       {(isMobile || hoveredProject == project._id) && (
         <div className="absolute top-3 right-3 w-5 h-5">
           <DropdownMenu>
@@ -131,7 +136,7 @@ const ProjectCard = ({
           <div className="flex items-center gap-2 text-muted-foreground">
             <CheckCircle className="text-green-500" size={16} />
             <span>
-              {project.totaltasksCompleted}/{project.totalTasks}
+              {project.totaltasksCompleted}/{project.totaltasksCompleted}
             </span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">

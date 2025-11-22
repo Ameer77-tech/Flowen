@@ -60,18 +60,18 @@ const ShowDialog = ({
                 <>
                   {" "}
                   <span className="text-destructive">Delete</span> task{" "}
-                  {Data.text}{" "}
+                  "{Data.text}"{" "}
                 </>
               ) : action === "edit" ? (
                 <>
                   {" "}
                   <span className="text-primary">Edit</span> task{" "}
-                  {Data.text}{" "}
+                  "{Data.text}"{" "}
                 </>
               ) : (
                 <>
                   {" "}
-                  <span className="text-cyan-600">Mark</span> {Data.text} as
+                  <span className="text-cyan-600">Mark</span> "{Data.text}" as
                   completed ?{" "}
                 </>
               )}

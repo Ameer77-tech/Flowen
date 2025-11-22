@@ -59,7 +59,6 @@ const AddProjectForm = ({ isOpen, setIsOpen, editingTask, projectDetails }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(projectData);
     setIsPending(true);
     try {
       const response = await fetch(`${apiUrl}/add-project`, {

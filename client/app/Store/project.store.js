@@ -10,7 +10,7 @@ const useProjectStore = create((set) => ({
   updateProject: (projectId, data) =>
     set((state) => ({
       projects: state.projects.map((project) =>
-        task._id === projectId ? { ...project, ...data } : task
+        project._id === projectId ? { ...project, ...data } : project
       ),
     })),
   deleteProject: (projectId) => {

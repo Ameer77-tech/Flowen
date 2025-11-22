@@ -8,7 +8,10 @@ import Toast from "@/components/Toast";
 
 const Cards = () => {
   const projects = useProjectStore((state) => state.projects);
+  console.log(projects);
+
   const deleteProject = useProjectStore((state) => state.deleteProject);
+  const updateProject = useProjectStore((state) => state.updateProject);
   const [hoveredProject, setHoveredProject] = useState("");
 
   const [actionClicked, setActionClicked] = useState("");
@@ -70,7 +73,55 @@ const Cards = () => {
     }
   };
   const onEdit = (id) => {};
-  const onMark = (id) => {};
+
+  const onMark = async (id) => {
+    setisPending(true);
+    if (projectData.id === "" || projectData.id.length === 0) {
+      return;
+    }
+    try {
+      const res = await fetch(`${apiUrl}/edit-project/${projectData.id}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ completed: true }),
+      });
+      const response = await res.json();
+      if (!response.success) {
+        settoastData({
+          message: response.reply,
+          type: "error",
+          isSuccess: false,
+        });
+        setShowToast(true);
+      } else {
+        console.log(response.updated._id);
+        
+        updateProject(response.updated._id, { completed: true });
+        settoastData({
+          message: response.reply,
+          type: "success",
+          isSuccess: false,
+        });
+        setShowToast(true);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setisPending(false);
+      setActionClicked(false);
+      setTimeout(() => {
+        setShowToast(false);
+        settoastData({
+          message: "",
+          type: "",
+          isSuccess: false,
+        });
+      }, 2000);
+    }
+  };
   return (
     <>
       <AnimatePresence>
