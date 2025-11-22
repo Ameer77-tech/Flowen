@@ -135,7 +135,9 @@ export const deleteProject = async (req, res) => {
         .status(409)
         .json({ reply: "No Projects to Delete", success: false });
     }
-    return res.status(200).json({ reply: "delted a project", success: true });
+    return res
+      .status(200)
+      .json({ reply: "Deleted a project", success: true, id: deleted._id });
   } catch (err) {
     res
       .status(500)
