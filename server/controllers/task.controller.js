@@ -110,11 +110,16 @@ export const getTasks = async (req, res) => {
   try {
     const query = { createdBy: userId, type };
 
-    if (filter === "completed" || filter === "in-progress") {
-      query.status = filter;
+    if (filter === "completed") {
+      query.status = "completed";
     }
-
+    if (filter === "in-progress") {
+      query.timer = { $gt: 0 };
+    }
+    
     const tasks = await tasksModel.find(query);
+    console.log(tasks);
+
     return res
       .status(200)
       .json({ reply: "Fetched Tasks", success: true, tasks });
