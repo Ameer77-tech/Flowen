@@ -12,6 +12,8 @@ import {
   CheckCircle,
   ChevronRight,
   MoreVertical,
+  PenBox,
+  Trash2,
 } from "lucide-react";
 import clsx from "clsx";
 import Link from "next/link";
@@ -23,7 +25,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const ProjectCard = ({ project, hoveredProject, setHoveredProject }) => {
+const ProjectCard = ({
+  project,
+  hoveredProject,
+  setHoveredProject,
+  setData,
+  setActionClicked,
+  setaction,
+}) => {
   const isMobile = useIsMobile();
   const progress =
     project.totalTasks > 0
@@ -48,21 +57,58 @@ const ProjectCard = ({ project, hoveredProject, setHoveredProject }) => {
       )}
     >
       {(isMobile || hoveredProject == project._id) && (
-        <div className="absolute top-3 right-3 z-50 w-5 h-5">
+        <div className="absolute top-3 right-3 w-5 h-5">
           <DropdownMenu>
             <DropdownMenuTrigger>
               {" "}
               <MoreVertical size={20} className="text-muted-foreground" />{" "}
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuContent className={"w-70"}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setData({
+                    text: project.title,
+                    id: project._id,
+                  });
+                  setaction("mark");
+                  setActionClicked(true);
+                }}
+                className={"hover:bg-primary/30! hover:text-primary!"}
+              >
+                <CheckCircle /> Mark as Completed
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setData({
+                    text: project.title,
+                    id: project._id,
+                  });
+                  setaction("edit");
+                  setActionClicked(true);
+                }}
+                className={"hover:bg-accent/30! hover:text-white!"}
+              >
+                <PenBox /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setData({
+                    text: project.title,
+                    id: project._id,
+                  });
+                  setaction("delete");
+                  setActionClicked(true);
+                }}
+                variant="destructive"
+              >
+                <Trash2 /> Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       )}
       <Link href={`/projects/${project._id}`} className="w-full">
-        <CardHeader className="flex px-5 py-2 flex-col md:flex-row justify-between items-start md:items-center gap-2">
+        <CardHeader className="flex py-0 flex-col md:flex-row justify-between items-start md:items-center gap-2">
           <div className="flex flex-col">
             <CardTitle className="text-base md:text-lg font-semibold text-foreground">
               {project.title}

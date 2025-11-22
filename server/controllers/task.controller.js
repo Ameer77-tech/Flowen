@@ -116,10 +116,14 @@ export const getTasks = async (req, res) => {
     if (filter === "in-progress") {
       query.timer = { $gt: 0 };
     }
-    
-    const tasks = await tasksModel.find(query);
-    console.log(tasks);
 
+    const data = await tasksModel.find(query);
+    let tasks;
+    if (filter === "in-progress") {
+      tasks = data.filter((task, idx) => task.status !== "completed");
+    } else {
+      tasks = data;
+    }
     return res
       .status(200)
       .json({ reply: "Fetched Tasks", success: true, tasks });

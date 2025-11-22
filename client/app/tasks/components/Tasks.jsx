@@ -13,7 +13,7 @@ import {
 import MobileTask from "./MobileTask";
 import clsx from "clsx";
 import useTaskStore from "@/app/Store/task.store";
-import ShowDialog from "./Dialog";
+import ShowDialog from "../../../components/Dialog";
 import { AnimatePresence } from "motion/react";
 import Toast from "@/components/Toast";
 import Loading from "@/components/Loading";
@@ -252,7 +252,7 @@ const Tasks = ({ view, filter }) => {
       <AnimatePresence>
         {actionClicked && (
           <ShowDialog
-            taskData={taskData}
+            Data={taskData}
             onDelete={onDelete}
             action={action}
             setActionClicked={setActionClicked}

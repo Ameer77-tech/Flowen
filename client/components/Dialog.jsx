@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 const ShowDialog = ({
-  taskData,
+  Data,
   setActionClicked,
   onDelete,
   action,
@@ -60,18 +60,18 @@ const ShowDialog = ({
                 <>
                   {" "}
                   <span className="text-destructive">Delete</span> task{" "}
-                  {taskData.text}{" "}
+                  {Data.text}{" "}
                 </>
               ) : action === "edit" ? (
                 <>
                   {" "}
                   <span className="text-primary">Edit</span> task{" "}
-                  {taskData.text}{" "}
+                  {Data.text}{" "}
                 </>
               ) : (
                 <>
                   {" "}
-                  <span className="text-cyan-600">Mark</span> {taskData.text} as
+                  <span className="text-cyan-600">Mark</span> {Data.text} as
                   completed ?{" "}
                 </>
               )}
@@ -101,7 +101,7 @@ const ShowDialog = ({
                   action === "delete"
                     ? onDelete()
                     : action === "edit"
-                    ? (seteditingTask(taskData.id), setEditingForm(true))
+                    ? (seteditingTask(Data.id), setEditingForm(true))
                     : onMark();
                 }}
                 className="w-1/2 rounded-lg"

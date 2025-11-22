@@ -101,14 +101,20 @@ const Task = ({
           {runningTask === id ? (
             <button
               onClick={() => onPause(id)}
-              className="hover:text-white text-muted-foreground transition-all ease"
+              className={clsx(
+                "hover:text-white text-muted-foreground transition-all ease",
+                filter === "completed" && "pointer-events-none opacity-30"
+              )}
             >
               <Pause size={20} />
             </button>
           ) : (
             <button
               onClick={() => onPlay(id)}
-              className="hover:text-white text-muted-foreground transition-all ease"
+              className={clsx(
+                "hover:text-white text-muted-foreground transition-all ease",
+                filter === "completed" && "pointer-events-none opacity-30"
+              )}
             >
               <PlayIcon size={20} />
             </button>
@@ -116,7 +122,10 @@ const Task = ({
 
           <button
             onClick={() => onReset(id)}
-            className="hover:text-white text-muted-foreground transition-all ease"
+            className={clsx(
+              "hover:text-white text-muted-foreground transition-all ease",
+              filter === "completed" && "pointer-events-none opacity-30"
+            )}
           >
             <RotateCcw size={20} />
           </button>
@@ -166,7 +175,11 @@ const Task = ({
           >
             <Trash2 size={20} color="red" />
           </button>
-          {runningTask === id && <p className="text-shadow-accent text-primary absolute right-2 top-0">Running</p>}
+          {runningTask === id && (
+            <p className="text-shadow-accent text-primary absolute right-2 top-0">
+              Running
+            </p>
+          )}
         </div>
       </TableCell>
     </MotionTableRow>
